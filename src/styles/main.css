@@ -2,18 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
 
-  color: #0f0f0f;
-  background-color: #f6f6f6;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+
+/* -- Nested List  -- */
+
+/* Set the first layer of list items to regular numeric decimals */
+.prose ol {
+   list-style-type: decimal;
+}
+
+/* Set the second layer of list items to lowercase alphabetic */
+.prose ol > li > ol {
+   list-style-type: lower-alpha;
+}
+
+/* Set the third layer of list items to uppercase Roman numerals */
+.prose ol > li > ol > li > ol {
+   list-style-type: upper-roman;
 }
