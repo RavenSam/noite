@@ -5,7 +5,7 @@ import { HopeProvider } from "@hope-ui/solid";
 import SideNav from "./components/ui/SideNav";
 
 const Notes = lazy(() => import("./pages/Notes"));
-const Home = lazy(() => import("./pages/Home"));
+const Settings = lazy(() => import("./pages/Settings"));
 
 export default function App() {
    return (
@@ -13,8 +13,8 @@ export default function App() {
          <HopeProvider>
             <SideNav>
                <Routes>
-                  <Route path="/notes" component={Notes} />
-                  <Route path="/" component={Home} />
+                  <Route path="/settings" component={Settings} />
+                  <Route path="/" component={Notes} />
                </Routes>
             </SideNav>
          </HopeProvider>

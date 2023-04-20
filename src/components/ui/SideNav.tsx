@@ -1,11 +1,38 @@
 import { A, useLocation } from "@solidjs/router";
 import { JSXElement, createSignal, For } from "solid-js";
-import { HiOutlineHome, HiOutlinePencilAlt } from "solid-icons/hi";
+import { HiOutlineCog, HiOutlinePencilAlt } from "solid-icons/hi";
 
 const mainPages = [
-	{ name: "Home", icon: <HiOutlineHome />, path: "/" },
-	{ name: "Notes", icon: <HiOutlinePencilAlt />, path: "/notes" },
+	{ name: "My Notes", icon: <HiOutlinePencilAlt />, path: "/", class: "" },
+	{
+		name: "Settings",
+		icon: <HiOutlineCog />,
+		path: "/settings",
+		class: "mt-auto",
+	},
 ];
+
+const LinkItem = ({ item }: { item: typeof mainPages[0] }) => {
+	const location = useLocation();
+
+	return (
+		<A
+			href={item.path}
+			class={`flex items-center rounded-xl ${item.class} ${
+				item.path === location.pathname
+					? "text-black"
+					: "hover:text-gray-700"
+			}`}
+		>
+			<span class="text-xl w-12 h-12 flex items-center justify-center">
+				{item.icon}
+			</span>
+			<span class="text-sm font-bold align-middle leading-none">
+				{item.name}
+			</span>
+		</A>
+	);
+};
 
 interface SideNavProps {
 	children: JSXElement;
@@ -13,44 +40,19 @@ interface SideNavProps {
 
 export default function SideNav(props: SideNavProps) {
 	const [menuWidth, setMenuWidth] = createSignal("13rem");
-	const location = useLocation();
 
 	return (
-		<div class="bg-gray-900 text-gray-200">
+		<div class="bg-gray-white text-gray-500">
 			<div
 				style={{ width: menuWidth() }}
 				class="fixed top-0 left-0 bottom-0"
 			>
-				<nav class="p-2 space-y-1">
-					<For each={mainPages}>
-						{(item) => (
-							<A
-								href={item.path}
-								class={`flex items-center rounded-xl ${
-									item.path === location.pathname
-										? "bg-sky-600 text-white shadow-md"
-										: "hover:bg-white/5 hover:text-white"
-								}`}
-							>
-								<span class="text-xl w-12 h-12 flex items-center justify-center">
-									{item.icon}
-								</span>
-								<span class="text-sm font-semibold align-middle leading-none">
-									{item.name}
-								</span>
-							</A>
-						)}
-					</For>
+				<nav class="flex flex-col p-2 space-y-1">
+					<For each={mainPages}>{(item) => <LinkItem item={item} />}</For>
 				</nav>
 			</div>
 
-			<main
-				style={{ "margin-left": menuWidth() }}
-				class="min-h-screen p-2"
-			>
-			<h1 class="text-3xl tracking-wider font-extrabold border-l-4 border-sky-500 p-4 leading-none">
-				{mainPages.filter(el=> el.path === location.pathname)[0].name}
-			</h1>
+			<main style={{ "margin-left": menuWidth() }} class="min-h-screen p-2">
 				{props.children}
 			</main>
 		</div>
