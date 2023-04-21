@@ -56,7 +56,7 @@ const AllNotes = () => {
 export default function Notes() {
 	return (
 		<div class="">
-			<h1 class="text-3xl text-black tracking-wider font-extrabold border-l-4 border-black p-4 leading-none">
+			<h1 class="text-3xl text-black tracking-wider font-extrabold py-4 leading-none">
 				My Notes
 			</h1>
 			<Tabs class="mt-4" >

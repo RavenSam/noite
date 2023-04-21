@@ -4,7 +4,13 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}"
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "var(--hope-colors-primary)",
+        primaryC: "var(--hope-colors-primaryC)",
+        gray1: "var(--hope-colors-gray1)",
+      }
+    },
   },
   plugins: [require('@tailwindcss/typography'),],
 }

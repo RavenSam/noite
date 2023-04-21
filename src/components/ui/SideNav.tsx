@@ -1,6 +1,8 @@
 import { A, useLocation } from "@solidjs/router";
 import { JSXElement, createSignal, For } from "solid-js";
 import { HiOutlineCog, HiOutlinePencilAlt } from "solid-icons/hi";
+import { Tooltip } from "@hope-ui/solid";
+import ColorModeSwitcher from "./ColorModeSwitcher";
 
 const mainPages = [
 	{ name: "My Notes", icon: <HiOutlinePencilAlt />, path: "/", class: "" },
@@ -8,7 +10,7 @@ const mainPages = [
 		name: "Settings",
 		icon: <HiOutlineCog />,
 		path: "/settings",
-		class: "mt-auto",
+		class: "!mt-auto",
 	},
 ];
 
@@ -18,18 +20,17 @@ const LinkItem = ({ item }: { item: typeof mainPages[0] }) => {
 	return (
 		<A
 			href={item.path}
-			class={`flex items-center rounded-xl ${item.class} ${
+			class={`flex items-center rounded-xl duration-300 ${item.class} ${
 				item.path === location.pathname
-					? "text-black"
-					: "hover:text-gray-700"
+					? "text-primaryC bg-primary"
+					: "hover:text-gray-700 text-gray1"
 			}`}
 		>
-			<span class="text-xl w-12 h-12 flex items-center justify-center">
-				{item.icon}
-			</span>
-			<span class="text-sm font-bold align-middle leading-none">
-				{item.name}
-			</span>
+			<Tooltip label={item.name} placement="right">
+				<span class="text-xl w-12 h-12 flex items-center justify-center">
+					{item.icon}
+				</span>
+			</Tooltip>
 		</A>
 	);
 };
@@ -39,16 +40,18 @@ interface SideNavProps {
 }
 
 export default function SideNav(props: SideNavProps) {
-	const [menuWidth, setMenuWidth] = createSignal("13rem");
+	const [menuWidth, setMenuWidth] = createSignal("4rem");
 
 	return (
-		<div class="bg-gray-white text-gray-500">
+		<div class="">
 			<div
 				style={{ width: menuWidth() }}
 				class="fixed top-0 left-0 bottom-0"
 			>
-				<nav class="flex flex-col p-2 space-y-1">
+				<nav class="flex flex-col px-2 py-4 h-full space-y-1">
 					<For each={mainPages}>{(item) => <LinkItem item={item} />}</For>
+
+					<ColorModeSwitcher />
 				</nav>
 			</div>
 
