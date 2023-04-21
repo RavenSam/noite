@@ -1,6 +1,6 @@
 import { For } from "solid-js";
 import { Tabs, TabList, Tab, TabPanel } from "@hope-ui/solid";
-
+import { HiSolidArrowRight } from "solid-icons/hi";
 import {
 	Drawer,
 	DrawerBody,
@@ -11,6 +11,7 @@ import {
 	DrawerOverlay,
 	createDisclosure,
 } from "@hope-ui/solid";
+import SimpleEditor from "../components/tiptap/SimpleEditor";
 
 const notes = [{}, {}, {}, {}, {}, {}, {}, {}, {}];
 
@@ -24,15 +25,25 @@ const SingleNote = () => {
 				class="min-h-[5rem] bg-slate-700 rounded-xl w-full cursor-pointer"
 			></div>
 
-			<Drawer opened={isOpen()} size="lg" placement="right" onClose={onClose}>
+			<Drawer
+				opened={isOpen()}
+				size="lg"
+				placement="right"
+				onClose={onClose}
+			>
 				<DrawerOverlay />
 				<DrawerContent>
-					<DrawerCloseButton />
-					<DrawerHeader fontWeight="bold" >Note title</DrawerHeader>
+					<DrawerCloseButton
+						borderRadius="0.75rem"
+						_focus={{ boxShadow: "none" }}
+						size="lg"
+						icon={<HiSolidArrowRight />}
+					/>
+					<DrawerHeader fontWeight="bold"  >Note</DrawerHeader>
 
 					<DrawerBody>
-						<div class="min-h-[5rem] bg-slate-300 rounded-xl w-full">
-							<h2 class="text-xl text-black text-center">#Note</h2>
+						<div class="w-full">
+							<SimpleEditor />
 						</div>
 					</DrawerBody>
 
@@ -56,13 +67,13 @@ const AllNotes = () => {
 export default function Notes() {
 	return (
 		<div class="">
-			<h1 class="text-3xl text-black tracking-wider font-extrabold py-4 leading-none">
+			<h1 class="text-3xl tracking-wider font-extrabold py-4 leading-none">
 				My Notes
 			</h1>
-			<Tabs class="mt-4" >
-				<TabList >
-					<Tab class="!shadow-none">All notes</Tab>
-					<Tab class="!shadow-none">Folders</Tab>
+			<Tabs class="mt-4">
+				<TabList>
+					<Tab>All notes</Tab>
+					<Tab>Folders</Tab>
 				</TabList>
 				<TabPanel>
 					<AllNotes />

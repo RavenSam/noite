@@ -43,7 +43,11 @@ export default function SideNav(props: SideNavProps) {
 	const [menuWidth, setMenuWidth] = createSignal("4rem");
 
 	return (
-		<div class="">
+		<>
+			<main style={{ "margin-left": menuWidth() }} class="min-h-screen p-2">
+				{props.children}
+			</main>
+
 			<div
 				style={{ width: menuWidth() }}
 				class="fixed top-0 left-0 bottom-0"
@@ -54,10 +58,6 @@ export default function SideNav(props: SideNavProps) {
 					<ColorModeSwitcher />
 				</nav>
 			</div>
-
-			<main style={{ "margin-left": menuWidth() }} class="min-h-screen p-2">
-				{props.children}
-			</main>
-		</div>
+		</>
 	);
 }

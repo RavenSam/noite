@@ -27,5 +27,17 @@ export const config: HopeThemeConfig = {
 
 			},
 		},
+
+		Tabs:{
+			baseStyle:{
+				tab:{
+					_focus: { boxShadow: "none" },
+					color:"$gray1",
+					fontSize:".9rem",
+					fontWeight: "800" ,
+					_selected:{ borderColor:"$primary", color:"$primary" }
+				}
+			}
+		}
 	},
 };

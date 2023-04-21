@@ -4,6 +4,11 @@
 
 
 
+#simple-editor > div{
+   width: 100%;
+   min-height: 80vh;
+   outline: none;
+}
 
 /* -- Nested List  -- */
 
@@ -21,3 +26,4 @@
 .prose ol > li > ol > li > ol {
    list-style-type: upper-roman;
 }
+
