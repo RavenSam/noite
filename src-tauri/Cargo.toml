@@ -1,5 +1,5 @@
 [package]
-name = "notes-garden"
+name = "noite"
 version = "0.0.0"
 description = "A Tauri App"
 authors = ["you"]
@@ -16,6 +16,11 @@ tauri-build = { version = "1.2", features = [] }
 tauri = { version = "1.2", features = ["shell-open"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+
+diesel = { version = "1.4.0", features = ["sqlite"] }
+diesel_migrations = { version = "1.4.0", features = ["sqlite"] }
+dotenv = "0.10"
+libsqlite3-sys = { version = "0.9.1", features = ["bundled"] }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

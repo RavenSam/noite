@@ -1,66 +1,40 @@
-import { For } from "solid-js";
-import { Tabs, TabList, Tab, TabPanel } from "@hope-ui/solid";
-import { HiSolidArrowRight } from "solid-icons/hi";
 import {
-	Drawer,
-	DrawerBody,
-	DrawerCloseButton,
-	DrawerContent,
-	DrawerFooter,
-	DrawerHeader,
-	DrawerOverlay,
-	createDisclosure,
-} from "@hope-ui/solid";
-import SimpleEditor from "../components/tiptap/SimpleEditor";
+	For,
+	createResource,
+	createEffect,
+	Show,
+	onMount,
+	createSignal,
+} from "solid-js";
+import { Tabs, TabList, Tab, TabPanel } from "@hope-ui/solid";
+import { NoteType, fetchNotes } from "../api/notes";
+import { SingleNote, NewNote } from "../components/ui/Note";
 
-const notes = [{}, {}, {}, {}, {}, {}, {}, {}, {}];
-
-const SingleNote = () => {
-	const { isOpen, onOpen, onClose } = createDisclosure();
-
-	return (
-		<>
-			<div
-				onClick={onOpen}
-				class="min-h-[5rem] bg-slate-700 rounded-xl w-full cursor-pointer"
-			></div>
-
-			<Drawer
-				opened={isOpen()}
-				size="lg"
-				placement="right"
-				onClose={onClose}
-			>
-				<DrawerOverlay />
-				<DrawerContent>
-					<DrawerCloseButton
-						borderRadius="0.75rem"
-						_focus={{ boxShadow: "none" }}
-						size="lg"
-						icon={<HiSolidArrowRight />}
-					/>
-					<DrawerHeader fontWeight="bold"  >Note</DrawerHeader>
-
-					<DrawerBody>
-						<div class="w-full">
-							<SimpleEditor />
-						</div>
-					</DrawerBody>
-
-					<DrawerFooter></DrawerFooter>
-				</DrawerContent>
-			</Drawer>
-		</>
-	);
-};
+const [data] = createResource(fetchNotes);
 
 const AllNotes = () => {
 	return (
 		<div class="py-4">
 			<div class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
-				<For each={notes}>{(note) => <SingleNote />}</For>
+				<For each={data()}>{(note) => <SingleNote note={note} />}</For>
 			</div>
 		</div>
+	);
+};
+
+const EmptyNotes = () => {
+	return (
+		<Tabs class="mt-4">
+			<TabList>
+				<Tab>All notes</Tab>
+			</TabList>
+			<TabPanel>
+				<div class="flex items-center flex-col space-y-8 justify-center min-h-[5rem]">
+					<h2 class="font-normal text-xl">No note found. Create one?</h2>
+					<NewNote />
+				</div>
+			</TabPanel>
+		</Tabs>
 	);
 };
 
@@ -70,16 +44,18 @@ export default function Notes() {
 			<h1 class="text-3xl tracking-wider font-extrabold py-4 leading-none">
 				My Notes
 			</h1>
-			<Tabs class="mt-4">
-				<TabList>
-					<Tab>All notes</Tab>
-					<Tab>Folders</Tab>
-				</TabList>
-				<TabPanel>
-					<AllNotes />
-				</TabPanel>
-				<TabPanel>2</TabPanel>
-			</Tabs>
+			<Show when={data()?.length} fallback={<EmptyNotes />}>
+				<Tabs class="mt-4">
+					<TabList>
+						<Tab>All notes</Tab>
+						<Tab>Folders</Tab>
+					</TabList>
+					<TabPanel>
+						<AllNotes />
+					</TabPanel>
+					<TabPanel>2</TabPanel>
+				</Tabs>
+			</Show>
 		</div>
 	);
 }

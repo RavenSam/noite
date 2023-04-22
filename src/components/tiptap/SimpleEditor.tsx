@@ -1,10 +1,16 @@
-import { createEffect, createSignal } from "solid-js"
+import { createEffect, createSignal, Accessor } from "solid-js"
 import { createEditorTransaction, createTiptapEditor } from "solid-tiptap"
 import { useColorMode} from "@hope-ui/solid";
 import StarterKit from "@tiptap/starter-kit"
 import Typography from "@tiptap/extension-typography"
+import { NoteType } from "../../api/notes";
 
-export default function SimpleEditor() {
+
+interface EditorProps {
+noteData: Accessor<NoteType | undefined>;
+}
+
+export default function SimpleEditor(props:EditorProps) {
    const [editable, setEditable] = createSignal(true)
    const { colorMode } = useColorMode();
 
@@ -16,7 +22,7 @@ export default function SimpleEditor() {
       editable: editable(),
       element: ref!,
       extensions: [StarterKit, Typography],
-      content: `<p>Simple Editor</p>`,
+      content: props.noteData()?.body || "<p></p>",
    }))
 
    createEffect(() => {

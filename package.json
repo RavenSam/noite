@@ -1,5 +1,5 @@
 {
-  "name": "notes-garden",
+  "name": "noite",
   "version": "0.0.0",
   "description": "",
   "scripts": {
@@ -22,7 +22,8 @@
     "solid-icons": "^1.0.4",
     "solid-js": "^1.7.0",
     "solid-tiptap": "^0.6.0",
-    "solid-transition-group": "^0.2.2"
+    "solid-transition-group": "^0.2.2",
+    "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",

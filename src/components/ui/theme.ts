@@ -22,7 +22,6 @@ export const config: HopeThemeConfig = {
 			baseStyle: {
 				root: {
 					borderRadius: "0.75rem",
-					_focus: { boxShadow: "none" },
 				},
 
 			},
