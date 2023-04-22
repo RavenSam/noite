@@ -1,7 +1,7 @@
 {
   "name": "noite",
   "version": "0.0.0",
-  "description": "",
+  "description": "A simple note desktop application",
   "scripts": {
     "start": "vite",
     "dev": "vite",
@@ -22,8 +22,7 @@
     "solid-icons": "^1.0.4",
     "solid-js": "^1.7.0",
     "solid-tiptap": "^0.6.0",
-    "solid-transition-group": "^0.2.2",
-    "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql"
+    "solid-transition-group": "^0.2.2"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
