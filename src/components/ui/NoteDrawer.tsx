@@ -13,10 +13,17 @@ import {
 	createDisclosure,
 	IconButton,
 } from "@hope-ui/solid";
+import { debounce } from "@solid-primitives/scheduled"
+
 
 import { NoteType } from "../../api/notes";
 
+const TIMEOUT = 5000;
+
+
 const options = { initial_drawer_size:"lg", editor_max_width: "800px" }
+
+
 
 interface DrawerProps {
 	isOpen: () => boolean;
@@ -25,14 +32,28 @@ interface DrawerProps {
 	fullScreen?: boolean;
 }
 
+
 export default function NoteDrawer(props: DrawerProps) {
 	const [fullScreen, setFullScreen] = createSignal(false);
+	const [title, setTitle] = createSignal("");
+	const [body, setBody] = createSignal("");
 
 	onMount(() => {
 		if (props.fullScreen) {
 			setFullScreen(props.fullScreen);
 		}
+
+		setTitle(props.noteData()?.title)
 	});
+
+	const saving = (body:string, newTitle?:string) => {
+		console.log({ body, title: newTitle ? newTitle : title() })
+	}
+
+	const triggerSaving = debounce((content, newTitle) => saving(content, newTitle), TIMEOUT)
+
+
+	const handleTitle = (e) => triggerSaving(body() , e.target.value);
 
 	return (
 		<Drawer
@@ -62,13 +83,13 @@ export default function NoteDrawer(props: DrawerProps) {
 						icon={<HiOutlineArrowRight />}
 					/>
 
-					<DrawerHeader maxW="70%" fontWeight="bold">
-						{props?.noteData()?.title}
+					<DrawerHeader maxW="70%">
+						<input type="text" value={title()} onChange={handleTitle} class="border-none font-bold w-full bg-transparent outline-none"/>
 					</DrawerHeader>
 
 					<DrawerBody>
 						<div style={{ "max-width": options.editor_max_width }} class="w-full mx-auto">
-							<SimpleEditor noteData={props.noteData} />
+							<SimpleEditor noteData={props.noteData} setBody={setBody} triggerSaving={triggerSaving} />
 						</div>
 					</DrawerBody>
 

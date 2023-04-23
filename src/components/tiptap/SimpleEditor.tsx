@@ -7,8 +7,12 @@ import { NoteType } from "../../api/notes";
 
 
 interface EditorProps {
-noteData: Accessor<NoteType | undefined>;
+   noteData: Accessor<NoteType | undefined>;
+   triggerSaving:()=> void
+   setBody:()=>void
 }
+
+
 
 export default function SimpleEditor(props:EditorProps) {
    const [editable, setEditable] = createSignal(true)
@@ -16,13 +20,16 @@ export default function SimpleEditor(props:EditorProps) {
 
    let ref!: HTMLDivElement
 
-
    const editor = createTiptapEditor(() => ({
-
       editable: editable(),
       element: ref!,
       extensions: [StarterKit, Typography],
       content: props.noteData()?.body || "<p></p>",
+       onUpdate: ({ editor }) =>{
+          const content = editor.getHTML()
+          props.setBody(content)
+          props.triggerSaving(content)
+       }
    }))
 
    createEffect(() => {

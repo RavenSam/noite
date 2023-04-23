@@ -18,13 +18,22 @@ pub fn establish_connection() -> SqliteConnection {
 
 // creates a new note
 pub fn note_create(conn: &SqliteConnection, title: &str, body: &str) -> String {
+    use notes::dsl::{ id };
     let new_note = NewNote { title, body };
-    let note = diesel::insert_into(notes::table)
+    diesel::insert_into(notes::table)
         .values(&new_note)
         .execute(conn)
         .expect("Error saving new post");
-    let note_json  =serde_json::to_string(&note).unwrap();
-    note_json
+
+    no_arg_sql_function!(last_insert_rowid, diesel::sql_types::Integer);
+    let qid: i32 = diesel::select(last_insert_rowid).first(conn).unwrap();
+    let inserted_note = notes::dsl::notes
+        .filter(id.eq(&qid))
+        .first::<Note>(conn)
+        .expect("Note not found");
+
+    let note_str = serde_json::to_string(&inserted_note).unwrap();
+    note_str
 }
 
 // Get all notes
@@ -36,16 +45,30 @@ pub fn notes_list(conn: &SqliteConnection) -> String {
     serialized
 }
 
-// Get a single note
-// pub fn get_note(conn: &SqliteConnection, id:&i32 ) -> String {
-//     use notes::dsl::{ id };
-//     let t = notes::dsl::notes.filter(id.eq(&qid));
-//     let single_notes = notes::dsl::notes(id)
-//         .load::<Note>(conn)
-//         .expect("Expect loading posts");
-//     let serialized = serde_json::to_string(&single_notes).unwrap();
-//     serialized
-// }
+
+pub fn update_note(conn: &SqliteConnection, qid: i32, new_title: &str, new_body: &str) -> String {
+    use notes::dsl::{ id, title, body };
+
+    notes::dsl::notes
+        .filter(id.eq(&qid))
+        .first::<Note>(conn)
+        .expect("Note not found");
+
+    diesel::update(notes::dsl::notes.filter(id.eq(&qid)))
+        .set((
+            title.eq(new_title),
+            body.eq(new_body),
+        ))
+        .execute(conn)
+        .expect("Error updating");
+
+    let updated = notes::dsl::notes
+        .filter(id.eq(&qid))
+        .first::<Note>(conn)
+        .expect("Note not found");
+
+    serde_json::to_string(&updated).unwrap()
+}
 
 
 pub fn delete_note(conn: &SqliteConnection, qid: i32) {

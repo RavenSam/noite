@@ -17,7 +17,7 @@ pub mod db;
 
 
 #[tauri::command]
-fn note_create(title: String, body: String, state: tauri::State<AppState>) -> String{
+fn note_create(title: String, body: String, state: tauri::State<AppState>) -> String {
     let conn = state.conn.lock().unwrap();
     db::note_create(&conn, &title, &body).to_string()
 }
@@ -29,11 +29,11 @@ fn notes_list(state: tauri::State<AppState>) -> String{
     db::notes_list(&con)
 }
 
-// #[tauri::command]
-// fn get_note(id: i32, state: tauri::State<AppState>) -> String {
-//     let conn = state.conn.lock().unwrap();
-//     db::get_note(&conn, id);
-// }
+#[tauri::command]
+fn update_note(id: i32, title: String, body: String, state: tauri::State<AppState>) -> String{
+    let conn = state.conn.lock().unwrap();
+    db::update_note(&conn, id, &title, &body)
+}
 
 #[tauri::command]
 fn delete_note(id: i32, state: tauri::State<AppState>) -> String {
@@ -58,7 +58,7 @@ fn main() {
 
     tauri::Builder::default()
         .manage(state)
-        .invoke_handler(tauri::generate_handler![delete_note, notes_list, note_create])
+        .invoke_handler(tauri::generate_handler![delete_note, notes_list, note_create, update_note])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
