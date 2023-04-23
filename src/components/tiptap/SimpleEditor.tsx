@@ -1,4 +1,4 @@
-import { createEffect, createSignal, Accessor } from "solid-js"
+import { createEffect, createSignal, Accessor, onMount } from "solid-js"
 import { createEditorTransaction, createTiptapEditor } from "solid-tiptap"
 import { useColorMode} from "@hope-ui/solid";
 import StarterKit from "@tiptap/starter-kit"
@@ -33,5 +33,9 @@ export default function SimpleEditor(props:EditorProps) {
       createEditorTransaction(editor, (editor) => editor?.setEditable(editable()))
    })
 
-   return <div id="simple-editor" class={`prose prose-sm  max-w-none ${colorMode() === "light" ? "" : "prose-invert"}`} ref={ref} />
+   onMount(() => {
+      editor()?.commands.focus("end")
+   })
+
+   return <div id="simple-editor" onClick={() => editor()?.commands.focus()} class={`prose prose-sm  max-w-none ${colorMode() === "light" ? "" : "prose-invert"}`} ref={ref} />
 }

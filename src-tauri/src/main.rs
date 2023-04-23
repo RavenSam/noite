@@ -14,15 +14,7 @@ pub mod schema;
 pub mod db;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
 
-#[tauri::command]
-fn yo() -> String{
-    format!("What are you doing")
-}
 
 #[tauri::command]
 fn note_create(title: String, body: String, state: tauri::State<AppState>) -> String{
@@ -66,7 +58,7 @@ fn main() {
 
     tauri::Builder::default()
         .manage(state)
-        .invoke_handler(tauri::generate_handler![greet, yo, delete_note, notes_list, note_create])
+        .invoke_handler(tauri::generate_handler![delete_note, notes_list, note_create])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

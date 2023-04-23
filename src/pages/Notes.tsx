@@ -7,20 +7,9 @@ import {
 	createSignal,
 } from "solid-js";
 import { Tabs, TabList, Tab, TabPanel } from "@hope-ui/solid";
-import { NoteType, fetchNotes } from "../api/notes";
+import { NoteType, fetchNotes, data } from "../api/notes";
 import { SingleNote, NewNote } from "../components/ui/Note";
-
-const [data] = createResource(fetchNotes);
-
-const AllNotes = () => {
-	return (
-		<div class="py-4">
-			<div class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
-				<For each={data()}>{(note) => <SingleNote note={note} />}</For>
-			</div>
-		</div>
-	);
-};
+import AllNotes from "../components/ui/AllNotes";
 
 const EmptyNotes = () => {
 	return (
@@ -40,7 +29,7 @@ const EmptyNotes = () => {
 
 export default function Notes() {
 	return (
-		<div class="">
+		<div>
 			<h1 class="text-3xl tracking-wider font-extrabold py-4 leading-none">
 				My Notes
 			</h1>
@@ -51,7 +40,7 @@ export default function Notes() {
 						<Tab>Folders</Tab>
 					</TabList>
 					<TabPanel>
-						<AllNotes />
+						<AllNotes data={data} />
 					</TabPanel>
 					<TabPanel>2</TabPanel>
 				</Tabs>
