@@ -1,5 +1,5 @@
 import SimpleEditor from "../tiptap/SimpleEditor";
-import { Accessor, createSignal, onMount } from "solid-js";
+import { Accessor, createSignal, onMount, Show, createResource, createEffect } from "solid-js";
 import { HiOutlineArrowRight } from "solid-icons/hi";
 import { FiMaximize, FiMinimize } from "solid-icons/fi";
 import {
@@ -14,11 +14,9 @@ import {
 	IconButton,
 } from "@hope-ui/solid";
 import { debounce } from "@solid-primitives/scheduled"
+import { NoteType, updateNote } from "../../api/notes";
 
-
-import { NoteType } from "../../api/notes";
-
-const TIMEOUT = 5000;
+const TIMEOUT = 1000;
 
 
 const options = { initial_drawer_size:"lg", editor_max_width: "800px" }
@@ -32,28 +30,41 @@ interface DrawerProps {
 	fullScreen?: boolean;
 }
 
+// const [data, { mutate, refetch }] = createResource(fetchNotes);
 
 export default function NoteDrawer(props: DrawerProps) {
 	const [fullScreen, setFullScreen] = createSignal(false);
 	const [title, setTitle] = createSignal("");
 	const [body, setBody] = createSignal("");
+	const [isSaving, setIsSaving] = createSignal<"saved" | boolean>(false);
 
 	onMount(() => {
 		if (props.fullScreen) {
 			setFullScreen(props.fullScreen);
 		}
-
-		setTitle(props.noteData()?.title)
 	});
 
-	const saving = (body:string, newTitle?:string) => {
-		console.log({ body, title: newTitle ? newTitle : title() })
+	createEffect(()=> setTitle(props.noteData()?.title || ""))
+	createEffect(()=> setBody(props.noteData()?.body || ""))
+
+	const saving = async (body:string, newTitle?:string) => {
+		setIsSaving(true)
+		let id = props.noteData()?.id
+		if(typeof id === "undefined") throw new Error("No note id.")
+
+		let t = newTitle ? newTitle : title()
+		const updatedNote = await updateNote(id, t, body)
+
+		setIsSaving("saved")
+
+		setTimeout(() => setIsSaving(false), 3000)		
+
 	}
 
-	const triggerSaving = debounce((content, newTitle) => saving(content, newTitle), TIMEOUT)
+	const triggerSaving = debounce((content:string, newTitle?:string) => saving(content, newTitle), TIMEOUT)
 
 
-	const handleTitle = (e) => triggerSaving(body() , e.target.value);
+	const handleTitle = (e:any) => triggerSaving(body() , e.target.value);
 
 	return (
 		<Drawer
@@ -66,6 +77,12 @@ export default function NoteDrawer(props: DrawerProps) {
 			<DrawerOverlay />
 			<DrawerContent>
 				<div class="mt-10 relative">
+					<Show when={isSaving()} >
+						<span class={`text-sm absolute right-[7rem] top-[1rem] py-2 ${isSaving() !== "saved" ? "animate-fadeInOut" : "opacity-70" }`} >
+							<Show when={isSaving() === "saved"} fallback="Saving" >Saved</Show>
+						</span>
+					</Show>
+
 					<IconButton
 						onClick={() => setFullScreen((prev) => !prev)}
 						colorScheme="neutral"

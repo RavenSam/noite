@@ -46,7 +46,7 @@ export default function SideNav(props: SideNavProps) {
 		<>
 			<main
 				style={{ "margin-left": menuWidth() }}
-				class="min-h-screen p-2 mt-10"
+				class="p-2 mt-10"
 			>
 				<div class="max-w-6xl mx-auto">{props.children}</div>
 			</main>

@@ -6,10 +6,12 @@ import {
 	onMount,
 	createSignal,
 } from "solid-js";
+import { createStore } from "solid-js/store";
 import { Tabs, TabList, Tab, TabPanel } from "@hope-ui/solid";
 import { NoteType, fetchNotes, data } from "../api/notes";
 import { SingleNote, NewNote } from "../components/ui/Note";
 import AllNotes from "../components/ui/AllNotes";
+import { useGlobalContext } from "../context/store"
 
 const EmptyNotes = () => {
 	return (
@@ -28,11 +30,13 @@ const EmptyNotes = () => {
 };
 
 export default function Notes() {
+
 	return (
 		<div>
 			<h1 class="text-3xl tracking-wider font-extrabold py-4 leading-none">
 				My Notes
 			</h1>
+
 			<Show when={data()?.length} fallback={<EmptyNotes />}>
 				<Tabs class="mt-4">
 					<TabList>

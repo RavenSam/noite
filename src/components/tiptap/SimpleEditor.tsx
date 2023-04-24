@@ -1,18 +1,17 @@
-import { createEffect, createSignal, Accessor, onMount } from "solid-js"
+import { createEffect, createSignal, Accessor, onMount, Setter } from "solid-js"
 import { createEditorTransaction, createTiptapEditor } from "solid-tiptap"
 import { useColorMode} from "@hope-ui/solid";
 import StarterKit from "@tiptap/starter-kit"
 import Typography from "@tiptap/extension-typography"
 import { NoteType } from "../../api/notes";
+import { Scheduled } from "@solid-primitives/scheduled"
 
 
 interface EditorProps {
    noteData: Accessor<NoteType | undefined>;
-   triggerSaving:()=> void
-   setBody:()=>void
+   triggerSaving:Scheduled<[content: string, newTitle?: string | undefined]>
+   setBody:Setter<string>
 }
-
-
 
 export default function SimpleEditor(props:EditorProps) {
    const [editable, setEditable] = createSignal(true)

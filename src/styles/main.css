@@ -2,9 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
-#simple-editor > div{
+#simple-editor > div {
    width: 100%;
    min-height: 80vh;
    outline: none;
@@ -30,20 +28,55 @@
 /* -- Nested List  -- */
 /*************************************/
 .titlebar {
-   padding: .7rem 1rem;
-   background: var(--hope-colors-primaryC);
-  user-select: none;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  position: fixed;
-  z-index: 9999;
-  top: 0;
-  left: 0;
-  right: 0;
+   padding: 0.7rem 1rem;
+   background: var(--hope-colors-background);
+   user-select: none;
+   display: flex;
+   justify-content: flex-end;
+   align-items: center;
+   position: fixed;
+   z-index: 9999;
+   top: 0;
+   left: 0;
+   right: 0;
 }
 .titlebar-button {
-  width: 17px;
-  height: 17px;
+   width: 17px;
+   height: 17px;
 }
 /*************************************/
+
+.animate-fadeInOut {
+   animation: fadeInOut 2s infinite;
+}
+
+@keyframes fadeInOut {
+   0% {
+      opacity: 0.2;
+   }
+   50% {
+      opacity: 0.7;
+   }
+   100% {
+      opacity: 0.2;
+   }
+}
+
+/*********************/
+.fade-top {
+   position: relative;
+}
+
+.fade-top::after {
+   content: "";
+   height: 2rem;
+   width: 100%;
+   bottom: 0;
+   position: absolute;
+   z-index: 10;
+   background: -webkit-linear-gradient(
+      bottom,
+      var(--hope-colors-background) 0%,
+      transparent 100%
+   );
+}

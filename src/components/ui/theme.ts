@@ -22,9 +22,42 @@ export const config: HopeThemeConfig = {
 			baseStyle: {
 				root: {
 					borderRadius: "0.75rem",
+					fontWeight:"700"
 				},
-
 			},
+		},
+
+		Notification:{
+			baseStyle:{
+				root:{
+					borderRadius: "0.75rem",
+				}
+			}
+		},
+
+		Modal:{
+			baseStyle:{
+				closeButton:{
+					borderRadius: "0.75rem",
+				},
+				content:{
+					borderRadius: "0.75rem",
+				},
+				header:{
+					fontWeight:"700"
+				}
+			}
+		},
+
+		Menu :{
+			baseStyle:{
+				content:{
+					borderRadius: "0.75rem",
+				},
+				item:{
+					borderRadius: "0.75rem",
+				}
+			}
 		},
 
 		Tabs:{
