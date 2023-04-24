@@ -6,7 +6,11 @@ pub struct Note {
     pub id: i32,
     pub title: String,
     pub body: String,
-    pub done: bool,
+    pub excerpt: String,
+    pub accent_color: String,
+    pub words_count: i32,
+    pub created_at: String,
+    pub updated_at: String,
 }
 
 #[derive(Insertable, Serialize, Debug, Clone)]

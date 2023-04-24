@@ -5,6 +5,10 @@ diesel::table! {
         id -> Integer,
         title -> Text,
         body -> Text,
-        done -> Bool,
+        excerpt -> Nullable<Text>,
+        accent_color -> Nullable<Text>,
+        words_count -> Nullable<Integer>,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
     }
 }
