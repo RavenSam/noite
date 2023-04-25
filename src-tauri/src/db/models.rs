@@ -6,11 +6,10 @@ pub struct Note {
     pub id: i32,
     pub title: String,
     pub body: String,
-    pub excerpt: String,
     pub accent_color: String,
     pub words_count: i32,
-    pub created_at: String,
-    pub updated_at: String,
+    pub created_at: chrono::NaiveDateTime,
+    pub updated_at: chrono::NaiveDateTime,
 }
 
 #[derive(Insertable, Serialize, Debug, Clone)]

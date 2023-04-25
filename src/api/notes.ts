@@ -6,6 +6,10 @@ export type NoteType = {
 	id: number;
 	title: string;
 	body: string;
+	accent_color: string;
+	words_count: number;
+	created_at:string;
+	updated_at:string;
 };
 
 export const fetchNotes = async () => {
@@ -19,7 +23,7 @@ const [data, { mutate, refetch }] = createResource(fetchNotes);
 export async function createNote(title: string, body: string) {
 	try {
 		const string_data: string = await invoke("note_create", { title, body });
-		const newNote = await JSON.parse(string_data);
+		const newNote: NoteType = await JSON.parse(string_data);
 		refetch();
 		return { newNote, error: false };
 	} catch (e: any) {
@@ -31,6 +35,17 @@ export async function createNote(title: string, body: string) {
 export async function updateNote(id:number,title: string, body: string){
 	try {
 		const string_data: string = await invoke("update_note", {id, title, body });
+		const updated_data: NoteType = await JSON.parse(string_data);
+		return { updated_data, error: false };
+	} catch (e: any) {
+		console.log(e);
+		return { error: e };
+	}
+}
+
+export async function updateNoteAccent(id:number, accent_color: string){
+	try {
+		const string_data: string = await invoke("update_accent", { accent_color });
 		const updated_data = await JSON.parse(string_data);
 		return { updated_data, error: false };
 	} catch (e: any) {

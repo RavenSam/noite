@@ -36,6 +36,12 @@ fn update_note(id: i32, title: String, body: String, state: tauri::State<AppStat
 }
 
 #[tauri::command]
+fn update_accent(id: i32, accent_color: String, state: tauri::State<AppState>) -> String{
+    let conn = state.conn.lock().unwrap();
+    db::update_note_accent(&conn, id, &accent_color)
+}
+
+#[tauri::command]
 fn delete_note(id: i32, state: tauri::State<AppState>) -> String {
     let conn = state.conn.lock().unwrap();
     db::delete_note(&conn, id);
@@ -58,7 +64,7 @@ fn main() {
 
     tauri::Builder::default()
         .manage(state)
-        .invoke_handler(tauri::generate_handler![delete_note, notes_list, note_create, update_note])
+        .invoke_handler(tauri::generate_handler![delete_note, notes_list, note_create, update_note, update_accent])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

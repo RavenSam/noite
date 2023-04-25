@@ -15,7 +15,7 @@ import { createSignal, Show, lazy, createEffect } from "solid-js";
 import { createNote, NoteType, deleteNote } from "../../api/notes";
 import NoteDrawer from "./NoteDrawer";
 import { FiMoreHorizontal, FiTrash2, FiPenTool } from "solid-icons/fi";
-
+import { useGlobalContext } from "../../context/store"
 
 const DeleteNote = (props:{noteId: number}) =>{
 	const { isOpen, onOpen, onClose } = createDisclosure()
@@ -75,7 +75,7 @@ const SingleNote = (props: { note: NoteType }) => {
 		<>
 			<div
 				onClick={onOpen}
-				style={{ "border-color": "blueviolet" }}
+				style={{ "border-color": noteData()?.accent_color }}
 				class="rounded-xl w-full cursor-pointer border-2 p-4 pb-1 shadow-5"
 			>
 				<div class="flex items-center justify-between">
@@ -102,13 +102,15 @@ const SingleNote = (props: { note: NoteType }) => {
 const NewNote = () => {
 	const { isOpen, onOpen, onClose } = createDisclosure();
 	const [noteData, setNoteData] = createSignal<NoteType>();
+	const { setStore } = useGlobalContext()
 
 	const handleNewNote = async () => {
 		const { newNote, error } = await createNote("Note", "<p></p>");
 
 		if (newNote) {
 			setNoteData(newNote);
-			console.log(newNote); 
+
+			setStore("notes", l => [...l, newNote])
 
 			onOpen();
 		} else {
@@ -136,7 +138,3 @@ const NewNote = () => {
 };
 
 export { SingleNote, NewNote };
-// _hover={{ bgColor: "$primary", opacity: "1" }}
-// 				bgColor="$primary"
-// 				color="$primaryC"
-// 				opacity=".7"

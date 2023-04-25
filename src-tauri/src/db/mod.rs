@@ -71,6 +71,20 @@ pub fn update_note(conn: &SqliteConnection, qid: i32, new_title: &str, new_body:
 }
 
 
+pub fn update_note_accent(conn: &SqliteConnection, qid: i32, new_accent_color: &str) -> String {
+    use notes::dsl::{ id, accent_color };
+
+    let updated = diesel::update(notes::dsl::notes.filter(id.eq(&qid)))
+        .set((
+            accent_color.eq(new_accent_color),
+        ))
+        .execute(conn)
+        .expect("Error updating accent color");
+
+    serde_json::to_string(&updated).unwrap()
+}
+
+
 pub fn delete_note(conn: &SqliteConnection, qid: i32) {
     use notes::dsl::{ id };
     let t = notes::dsl::notes.filter(id.eq(&qid));

@@ -15,8 +15,10 @@ import {
 } from "@hope-ui/solid";
 import { debounce } from "@solid-primitives/scheduled"
 import { NoteType, updateNote } from "../../api/notes";
+import { useGlobalContext } from "../../context/store"
 
-const TIMEOUT = 1000;
+
+const TIMEOUT = 800;
 
 
 const options = { initial_drawer_size:"lg", editor_max_width: "800px" }
@@ -37,6 +39,7 @@ export default function NoteDrawer(props: DrawerProps) {
 	const [title, setTitle] = createSignal("");
 	const [body, setBody] = createSignal("");
 	const [isSaving, setIsSaving] = createSignal<"saved" | boolean>(false);
+	const { setStore } = useGlobalContext()
 
 	onMount(() => {
 		if (props.fullScreen) {
@@ -54,6 +57,7 @@ export default function NoteDrawer(props: DrawerProps) {
 
 		let t = newTitle ? newTitle : title()
 		const updatedNote = await updateNote(id, t, body)
+		setStore("notes", (n) => n.id === id, { title: t, body })
 
 		setIsSaving("saved")
 

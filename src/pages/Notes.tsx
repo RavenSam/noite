@@ -30,6 +30,11 @@ const EmptyNotes = () => {
 };
 
 export default function Notes() {
+	const { store, setStore } = useGlobalContext()
+
+	createEffect(()=>{
+		setStore("notes", ()=> [...(data() || [])])
+	})
 
 	return (
 		<div>
@@ -37,16 +42,22 @@ export default function Notes() {
 				My Notes
 			</h1>
 
-			<Show when={data()?.length} fallback={<EmptyNotes />}>
+			<Show when={store.notes.length} fallback={<EmptyNotes />}>
 				<Tabs class="mt-4">
 					<TabList>
 						<Tab>All notes</Tab>
 						<Tab>Folders</Tab>
 					</TabList>
 					<TabPanel>
-						<AllNotes data={data} />
+						<AllNotes data={store.notes} />
 					</TabPanel>
-					<TabPanel>2</TabPanel>
+					<TabPanel>
+						<For each={store.notes} fallback="Nothing" >
+							{note => <div class="p-8 bg-sky-500/40 rounded-xl">
+								<h2>{note.title}</h2>
+							</div>}
+						</For>
+					</TabPanel>
 				</Tabs>
 			</Show>
 		</div>

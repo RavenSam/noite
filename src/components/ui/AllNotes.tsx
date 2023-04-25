@@ -45,7 +45,7 @@ const FilterNotes = () => {
 };
 
 interface AllNotesProps {
-  data: Resource<NoteType[]>;
+  data: NoteType[];
 }
 
 export default function AllNotes(props:AllNotesProps) {
@@ -58,7 +58,7 @@ export default function AllNotes(props:AllNotesProps) {
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
-        <For each={props.data()}>{(note) => <SingleNote note={note} />}</For>
+        <For each={props.data}>{(note) => <SingleNote note={note} />}</For>
       </div>
     </div>
   );
