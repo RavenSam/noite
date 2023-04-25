@@ -8,7 +8,7 @@ import {
 	MenuItem,
 	Modal,
 	ModalOverlay,
-	ModalContent,ModalCloseButton,ModalHeader,ModalBody, ModalFooter
+	ModalContent,ModalCloseButton,ModalHeader,ModalBody, ModalFooter, Tooltip
 } from "@hope-ui/solid";
 import { HiSolidPlus } from "solid-icons/hi";
 import { createSignal, Show, lazy, createEffect } from "solid-js";
@@ -44,6 +44,33 @@ const DeleteNote = (props:{noteId: number}) =>{
 }
 
 
+const CutomizeNote = (props:{noteId: number}) =>{
+	const { isOpen, onOpen, onClose } = createDisclosure()
+
+
+
+  return (
+    <>
+      <MenuItem onSelect={onOpen} icon={<FiPenTool />}>Cuttomize</MenuItem>
+      <Modal centered initialFocus="#cancel_delete" opened={isOpen()} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalHeader>Customize note</ModalHeader>
+          <ModalBody>
+            <p>Are you sure you want to delete this note?</p>
+          </ModalBody>
+          <ModalFooter class="space-x-3" >
+            <Button id="cancel_delete" onClick={onClose} variant="subtle" colorScheme="neutral" >Cancel</Button>
+            <Button  bgColor="$primary" color="$primaryC" colorScheme="neutral">Save</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  )
+}
+
+
 
 const NoteOption = (props:{noteId: number}) => {
 	return (
@@ -59,7 +86,8 @@ const NoteOption = (props:{noteId: number}) => {
 			/>
 			<MenuContent minW="$60">
 				<DeleteNote noteId={props.noteId} />
-				<MenuItem icon={<FiPenTool />}>Cuttomize</MenuItem>
+
+				<CutomizeNote noteId={props.noteId} />
 			</MenuContent>
 		</Menu>
 	);
@@ -88,8 +116,9 @@ const SingleNote = (props: { note: NoteType }) => {
 	
 
 				<div class="flex items-center justify-between">
-					<span class="text-xs font-semibold opacity-50">10:00PM</span>
-
+					<Tooltip label={`Updated at ${noteData()?.updated_at}`}>
+						<span class="text-xs font-semibold opacity-50">10:00PM</span>
+					</Tooltip>
 					<NoteOption noteId={noteData()?.id!} />
 				</div>
 			</div>

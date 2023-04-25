@@ -35,6 +35,15 @@ export const config: HopeThemeConfig = {
 			}
 		},
 
+		Tooltip:{
+			baseStyle:{
+					borderRadius: "0.75rem",
+					fontSize:"10px",
+					fontWeight:"bold",
+					padding:"8px 10px"
+			}
+		},
+
 		Modal:{
 			baseStyle:{
 				closeButton:{

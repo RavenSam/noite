@@ -52,11 +52,7 @@ export default function Notes() {
 						<AllNotes data={store.notes} />
 					</TabPanel>
 					<TabPanel>
-						<For each={store.notes} fallback="Nothing" >
-							{note => <div class="p-8 bg-sky-500/40 rounded-xl">
-								<h2>{note.title}</h2>
-							</div>}
-						</For>
+						2
 					</TabPanel>
 				</Tabs>
 			</Show>
