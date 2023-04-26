@@ -37,8 +37,8 @@ export const config: HopeThemeConfig = {
 
 		Tooltip:{
 			baseStyle:{
-					borderRadius: "0.75rem",
-					fontSize:"10px",
+					borderRadius: "0.5rem",
+					fontSize:"12px",
 					fontWeight:"bold",
 					padding:"8px 10px"
 			}

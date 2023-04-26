@@ -5,6 +5,7 @@ CREATE TABLE notes (
   body TEXT NOT NULL DEFAULT '',
   accent_color TEXT NOT NULL DEFAULT 'transparent',
   words_count INTEGER NOT NULL DEFAULT 0,
+  favorited BOOLEAN NOT NULL DEFAULT 'f',
   created_at timestamp  NOT NULL  DEFAULT current_timestamp,
   updated_at timestamp  NOT NULL  DEFAULT current_timestamp
 );

@@ -4,6 +4,9 @@ dependencies:
   '@hope-ui/solid':
     specifier: ^0.6.7
     version: 0.6.7(@stitches/core@1.2.8)(solid-js@1.7.3)(solid-transition-group@0.2.2)
+  '@solid-primitives/keyboard':
+    specifier: ^1.2.0
+    version: 1.2.0(solid-js@1.7.3)
   '@solid-primitives/scheduled':
     specifier: ^1.3.2
     version: 1.3.2(solid-js@1.7.3)
@@ -28,6 +31,9 @@ dependencies:
   '@tiptap/starter-kit':
     specifier: ^2.0.3
     version: 2.0.3(@tiptap/pm@2.0.3)
+  date-fns:
+    specifier: ^2.29.3
+    version: 2.29.3
   solid-icons:
     specifier: ^1.0.4
     version: 1.0.4(solid-js@1.7.3)
@@ -736,8 +742,37 @@ packages:
       type-fest: 2.19.0
     dev: false
 
+  /@solid-primitives/event-listener@2.2.10(solid-js@1.7.3):
+    resolution: {integrity: sha512-rWBCeF1NRAmLJtVo2wpY9vF3IAQ8VAxGnFDOUqROSdYhUfiCeM7Hw3PKkGCELwNQzZK1W1z+MjzB7fctpjX4Sg==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      '@solid-primitives/utils': 6.1.0(solid-js@1.7.3)
+      solid-js: 1.7.3
+    dev: false
+
+  /@solid-primitives/keyboard@1.2.0(solid-js@1.7.3):
+    resolution: {integrity: sha512-R8jTDxzWkuvww1MsT9mOCY2Sb85uBCwlz1gXyCxQilgsH5OACt/W0RLHP4DVVpUEEj2zUx+Bau+EhoQRRK1vkg==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      '@solid-primitives/event-listener': 2.2.10(solid-js@1.7.3)
+      '@solid-primitives/rootless': 1.3.2(solid-js@1.7.3)
+      '@solid-primitives/utils': 6.1.0(solid-js@1.7.3)
+      solid-js: 1.7.3
+    dev: false
+
   /@solid-primitives/refs@1.0.2(solid-js@1.7.3):
     resolution: {integrity: sha512-qnqQRdYbsENlVx86QCfftRKGZ/9zUJMGK9U85xDRymocEyeUXxdxgq0FeyGhvgg4A25spJVwHmuZUGY0aMBBLA==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      '@solid-primitives/utils': 6.1.0(solid-js@1.7.3)
+      solid-js: 1.7.3
+    dev: false
+
+  /@solid-primitives/rootless@1.3.2(solid-js@1.7.3):
+    resolution: {integrity: sha512-R1rncXOUcB/i3PyvKhSWcsocPRe1n3HsMIO717RpWFd2knUF8+b0cGgRDEoneGaV/a5kq4cqH3csa66klxuM3A==}
     peerDependencies:
       solid-js: ^1.6.12
     dependencies:
@@ -1345,6 +1380,11 @@ packages:
 
   /dash-get@1.0.2:
     resolution: {integrity: sha512-4FbVrHDwfOASx7uQVxeiCTo7ggSdYZbqs8lH+WU6ViypPlDbe9y6IP5VVUDQBv9DcnyaiPT5XT0UWHgJ64zLeQ==}
+    dev: false
+
+  /date-fns@2.29.3:
+    resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
+    engines: {node: '>=0.11'}
     dev: false
 
   /debug@4.3.4:

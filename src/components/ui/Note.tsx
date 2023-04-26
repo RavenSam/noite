@@ -8,71 +8,127 @@ import {
 	MenuItem,
 	Modal,
 	ModalOverlay,
-	ModalContent,ModalCloseButton,ModalHeader,ModalBody, ModalFooter, Tooltip
+	ModalContent,
+	ModalCloseButton,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
+	Tooltip,
 } from "@hope-ui/solid";
 import { HiSolidPlus } from "solid-icons/hi";
 import { createSignal, Show, lazy, createEffect } from "solid-js";
-import { createNote, NoteType, deleteNote } from "../../api/notes";
+import {
+	createNote,
+	NoteType,
+	deleteNote,
+	updateNoteAccent,
+} from "../../api/notes";
 import NoteDrawer from "./NoteDrawer";
-import { FiMoreHorizontal, FiTrash2, FiPenTool } from "solid-icons/fi";
-import { useGlobalContext } from "../../context/store"
+import { FiMoreHorizontal, FiTrash2, FiPenTool, FiStar } from "solid-icons/fi";
+import { useGlobalContext } from "../../context/store";
+import { format, formatDistanceToNow, parseISO, addMinutes } from "date-fns";
 
-const DeleteNote = (props:{noteId: number}) =>{
-	const { isOpen, onOpen, onClose } = createDisclosure()
+const DeleteNote = (props: { noteId: number }) => {
+	const { isOpen, onOpen, onClose } = createDisclosure();
 
+	return (
+		<>
+			<MenuItem onSelect={onOpen} icon={<FiTrash2 />}>
+				Delete
+			</MenuItem>
+			<Modal
+				centered
+				initialFocus="#cancel_delete"
+				opened={isOpen()}
+				onClose={onClose}
+			>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalCloseButton />
+					<ModalHeader>Delete note</ModalHeader>
+					<ModalBody>
+						<p>Are you sure you want to delete this note?</p>
+					</ModalBody>
+					<ModalFooter class="space-x-3">
+						<Button
+							id="cancel_delete"
+							onClick={onClose}
+							variant="subtle"
+							colorScheme="neutral"
+						>
+							Cancel
+						</Button>
+						<Button
+							onClick={() => deleteNote(props.noteId)}
+							colorScheme="danger"
+						>
+							Delete
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+		</>
+	);
+};
 
+const CutomizeNote = (props: { noteId: number }) => {
+	const { isOpen, onOpen, onClose } = createDisclosure();
+	const { store, setStore } = useGlobalContext();
+	const [clr, setClr] = createSignal("");
 
-  return (
-    <>
-      <MenuItem onSelect={onOpen} icon={<FiTrash2 />}>Delete</MenuItem>
-      <Modal centered initialFocus="#cancel_delete" opened={isOpen()} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalCloseButton />
-          <ModalHeader>Delete note</ModalHeader>
-          <ModalBody>
-            <p>Are you sure you want to delete this note?</p>
-          </ModalBody>
-          <ModalFooter class="space-x-3" >
-            <Button id="cancel_delete" onClick={onClose} variant="subtle" colorScheme="neutral" >Cancel</Button>
-            <Button onClick={()=> deleteNote(props.noteId)} colorScheme="danger">Delete</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
-  )
-}
+	const saveCustom = async () => {
+		updateNoteAccent(props.noteId, clr());
+		setStore("notes", (n) => n.id === props.noteId, "accent_color", clr());
+		onClose();
+	};
 
+	return (
+		<>
+			<MenuItem onSelect={onOpen} icon={<FiPenTool />}>
+				Cuttomize
+			</MenuItem>
+			<Modal
+				centered
+				initialFocus="#cancel_delete"
+				opened={isOpen()}
+				onClose={onClose}
+			>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalCloseButton />
+					<ModalHeader>Customize note</ModalHeader>
+					<ModalBody>
+						<input
+							type="color"
+							value={clr()}
+							onChange={(e: any) => setClr(e.target.value)}
+						/>
+					</ModalBody>
+					<ModalFooter class="space-x-3">
+						<Button
+							id="cancel_delete"
+							onClick={onClose}
+							variant="subtle"
+							colorScheme="neutral"
+						>
+							Cancel
+						</Button>
+						<Button
+							onClick={saveCustom}
+							bgColor="$primary"
+							color="$primaryC"
+							colorScheme="neutral"
+						>
+							Save
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+		</>
+	);
+};
 
-const CutomizeNote = (props:{noteId: number}) =>{
-	const { isOpen, onOpen, onClose } = createDisclosure()
-
-
-
-  return (
-    <>
-      <MenuItem onSelect={onOpen} icon={<FiPenTool />}>Cuttomize</MenuItem>
-      <Modal centered initialFocus="#cancel_delete" opened={isOpen()} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalCloseButton />
-          <ModalHeader>Customize note</ModalHeader>
-          <ModalBody>
-            <p>Are you sure you want to delete this note?</p>
-          </ModalBody>
-          <ModalFooter class="space-x-3" >
-            <Button id="cancel_delete" onClick={onClose} variant="subtle" colorScheme="neutral" >Cancel</Button>
-            <Button  bgColor="$primary" color="$primaryC" colorScheme="neutral">Save</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
-  )
-}
-
-
-
-const NoteOption = (props:{noteId: number}) => {
+const NoteOption = (props: { noteId: number }) => {
 	return (
 		<Menu>
 			<MenuTrigger
@@ -81,7 +137,7 @@ const NoteOption = (props:{noteId: number}) => {
 				marginRight="-10px"
 				fontSize="1.2rem"
 				colorScheme="neutral"
-				onClick={(e) => e.stopPropagation()}
+				onClick={(e: any) => e.stopPropagation()}
 				icon={<FiMoreHorizontal />}
 			/>
 			<MenuContent minW="$60">
@@ -96,29 +152,68 @@ const NoteOption = (props:{noteId: number}) => {
 const SingleNote = (props: { note: NoteType }) => {
 	const { isOpen, onOpen, onClose } = createDisclosure();
 	const [noteData, setNoteData] = createSignal<NoteType>();
+	const [fav, setFav] = createSignal(false);
 
-	createEffect(() => setNoteData(props.note));
+	createEffect(() => {
+		setNoteData(props.note);
+	});
+
+
+	const handleFav = (e:any) =>{
+		e.stopPropagation()
+		setFav(prev => !prev)
+	}
 
 	return (
 		<>
 			<div
 				onClick={onOpen}
+				tabindex="0"
 				style={{ "border-color": noteData()?.accent_color }}
-				class="rounded-xl w-full cursor-pointer border-2 p-4 pb-1 shadow-5"
+				class="relative overflow-hidden group rounded-xl w-full cursor-pointer border-2 p-4 pb-1 shadow-5"
 			>
+				<div
+					style={{ background: noteData()?.accent_color }}
+					class="absolute inset-0 -z-10 opacity-0 duration-300 group-hover:opacity-10"
+				/>
+
 				<div class="flex items-center justify-between">
 					<h2 class="font-semibold">{noteData()?.title}</h2>
 				</div>
 
-	
+				<div
+					class="h-36 my-3 text-sm opacity-70 overflow-hidden"
+					innerHTML={noteData()?.body}
+				/>
 
-				<div class="h-36 my-3 text-sm opacity-70 overflow-hidden" innerHTML={noteData()?.body} />			
-	
+				<div class="flex items-center">
+					<Show when={typeof noteData()?.updated_at === "string"}>
+						<Tooltip
+							label={`Last update ${format(
+								parseISO(noteData()?.updated_at!),
+								"MMMM dd YYY - HH:MM"
+							)}`}
+						>
+							<span class="text-xs font-semibold opacity-50 capitalize">
+								{formatDistanceToNow(
+									parseISO(noteData()?.updated_at!),
+									{ addSuffix: true }
+								)}
+							</span>
+						</Tooltip>
+					</Show>
 
-				<div class="flex items-center justify-between">
-					<Tooltip label={`Updated at ${noteData()?.updated_at}`}>
-						<span class="text-xs font-semibold opacity-50">10:00PM</span>
-					</Tooltip>
+					<IconButton
+						aria-label="Favorite"
+						variant="ghost"
+						marginRight="5px"
+						fontSize="1.2rem"
+						onClick={handleFav}
+						colorScheme={fav() ? "warning" : "neutral"}
+						icon={<FiStar fill={fav() ? "#ffb224" : "transparent"} />}
+						class="ml-auto !bg-transparent"
+					/>
+
 					<NoteOption noteId={noteData()?.id!} />
 				</div>
 			</div>
@@ -131,7 +226,7 @@ const SingleNote = (props: { note: NoteType }) => {
 const NewNote = () => {
 	const { isOpen, onOpen, onClose } = createDisclosure();
 	const [noteData, setNoteData] = createSignal<NoteType>();
-	const { setStore } = useGlobalContext()
+	const { setStore } = useGlobalContext();
 
 	const handleNewNote = async () => {
 		const { newNote, error } = await createNote("Note", "<p></p>");
@@ -139,7 +234,7 @@ const NewNote = () => {
 		if (newNote) {
 			setNoteData(newNote);
 
-			setStore("notes", l => [...l, newNote])
+			setStore("notes", (l) => [...l, newNote]);
 
 			onOpen();
 		} else {

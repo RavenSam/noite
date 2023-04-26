@@ -43,9 +43,9 @@ export async function updateNote(id:number,title: string, body: string){
 	}
 }
 
-export async function updateNoteAccent(id:number, accent_color: string){
+export async function updateNoteAccent(id:number, accentColor: string){
 	try {
-		const string_data: string = await invoke("update_accent", { accent_color });
+		const string_data: string = await invoke("update_accent", { id, accentColor });
 		const updated_data = await JSON.parse(string_data);
 		return { updated_data, error: false };
 	} catch (e: any) {
