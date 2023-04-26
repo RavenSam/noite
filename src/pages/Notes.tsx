@@ -8,10 +8,10 @@ import {
 } from "solid-js";
 import { createStore } from "solid-js/store";
 import { Tabs, TabList, Tab, TabPanel } from "@hope-ui/solid";
-import { NoteType, fetchNotes, data } from "../api/notes";
-import { SingleNote, NewNote } from "../components/ui/Note";
-import AllNotes from "../components/ui/AllNotes";
-import { useGlobalContext } from "../context/store"
+import { NoteType, fetchNotes, data } from "~/api/notes";
+import { SingleNote, NewNote } from "~/components/ui/Note";
+import AllNotes from "~/components/ui/AllNotes";
+import { useGlobalContext } from "~/context/store"
 
 const EmptyNotes = () => {
 	return (

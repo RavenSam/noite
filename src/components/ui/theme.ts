@@ -27,6 +27,14 @@ export const config: HopeThemeConfig = {
 			},
 		},
 
+		Input:{
+			baseStyle:{
+				input:{
+					borderRadius: "0.75rem",
+				}
+			}
+		},
+
 		Notification:{
 			baseStyle:{
 				root:{

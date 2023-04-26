@@ -1,10 +1,15 @@
-import { For, Resource } from "solid-js";
+import { Show, For, Resource, createSignal, createEffect } from "solid-js";
 import {
   Menu,
   MenuTrigger,
   IconButton,
   MenuContent,
   MenuItem,
+  Input,
+  InputGroup,
+  InputRightElement,
+  InputLeftElement,
+  Spinner,
 } from "@hope-ui/solid";
 import {
   FiFilter,
@@ -12,12 +17,36 @@ import {
   FiExternalLink,
   FiRepeat,
   FiEdit,
+  FiSearch,
 } from "solid-icons/fi";
-import { NewNote, SingleNote } from "./Note";
-import { NoteType } from "../../api/notes";
+import { NewNote, SingleNote } from "~/components/ui/Note";
+import { NoteType } from "~/api/notes";
+import { useGlobalContext } from "~/context/store";
 
+const SearchNotes = () => {
+  const [searching, setSearching] = createSignal(false);
+
+  return (
+    <InputGroup class="flex-1">
+    <InputLeftElement pointerEvents="none">
+      <FiSearch opacity=".5" />
+    </InputLeftElement>
+
+      <Input placeholder="Search notes" />
+
+      <Show when={searching()}>
+        <InputRightElement pointerEvents="none">
+          <Spinner size="sm" opacity=".5" />
+        </InputRightElement>
+      </Show>
+    </InputGroup>
+  );
+};
 
 const FilterNotes = () => {
+  const { store, setStore } = useGlobalContext();
+
+
   return (
     <Menu>
       <MenuTrigger
@@ -48,12 +77,14 @@ interface AllNotesProps {
   data: NoteType[];
 }
 
-export default function AllNotes(props:AllNotesProps) {
+export default function AllNotes(props: AllNotesProps) {
   return (
     <div class="">
-      <div class="flex items-center justify-end pb-5 pt-1 space-x-2">
+      <div class="flex items-center justify-end pb-5 pt-1 space-x-3">
+        <SearchNotes />
+
         <FilterNotes />
-        
+
         <NewNote />
       </div>
 

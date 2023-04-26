@@ -8,6 +8,7 @@ pub struct Note {
     pub body: String,
     pub accent_color: String,
     pub words_count: i32,
+    pub favorited: bool,
     pub created_at: chrono::NaiveDateTime,
     pub updated_at: chrono::NaiveDateTime,
 }

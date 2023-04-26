@@ -1,4 +1,4 @@
-import SimpleEditor from "../tiptap/SimpleEditor";
+import SimpleEditor from "~/components/tiptap/SimpleEditor";
 import { Accessor, createSignal, onMount, Show, createResource, createEffect } from "solid-js";
 import { HiOutlineArrowRight } from "solid-icons/hi";
 import { FiMaximize, FiMinimize } from "solid-icons/fi";
@@ -14,8 +14,8 @@ import {
 	IconButton,
 } from "@hope-ui/solid";
 import { debounce } from "@solid-primitives/scheduled"
-import { NoteType, updateNote } from "../../api/notes";
-import { useGlobalContext } from "../../context/store"
+import { NoteType, updateNote } from "~/api/notes";
+import { useGlobalContext } from "~/context/store"
 
 
 const TIMEOUT = 800;
@@ -108,8 +108,8 @@ export default function NoteDrawer(props: DrawerProps) {
 						<input type="text" value={title()} onChange={handleTitle} class="border-none font-bold w-full bg-transparent outline-none"/>
 					</DrawerHeader>
 
-					<DrawerBody>
-						<div style={{ "max-width": options.editor_max_width }} class="w-full mx-auto">
+					<DrawerBody class="" >
+						<div style={{ "max-width": options.editor_max_width }} class="max-w-full mx-auto h-full max-h-full !overflow-y-scroll">
 							<SimpleEditor noteData={props.noteData} setBody={setBody} triggerSaving={triggerSaving} />
 						</div>
 					</DrawerBody>

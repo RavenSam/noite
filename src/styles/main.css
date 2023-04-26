@@ -5,6 +5,7 @@
 #simple-editor > div {
    width: 100%;
    min-height: 80vh;
+   max-height: 100%;
    outline: none;
 }
 

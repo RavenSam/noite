@@ -1,7 +1,7 @@
 import { createContext, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 import type { SetStoreFunction } from "solid-js/store";
-import type { NoteType } from "../api/notes"
+import type { NoteType } from "~/api/notes"
 
 interface ContextProps{
 	store: {notes: NoteType[]}

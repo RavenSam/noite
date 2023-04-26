@@ -22,10 +22,10 @@ import {
 	NoteType,
 	deleteNote,
 	updateNoteAccent,
-} from "../../api/notes";
-import NoteDrawer from "./NoteDrawer";
+} from "~/api/notes";
+import NoteDrawer from "~/components/ui/NoteDrawer";
 import { FiMoreHorizontal, FiTrash2, FiPenTool, FiStar } from "solid-icons/fi";
-import { useGlobalContext } from "../../context/store";
+import { useGlobalContext } from "~/context/store";
 import { format, formatDistanceToNow, parseISO, addMinutes } from "date-fns";
 
 const DeleteNote = (props: { noteId: number }) => {
@@ -164,6 +164,11 @@ const SingleNote = (props: { note: NoteType }) => {
 		setFav(prev => !prev)
 	}
 
+	function localize(t:string){
+		const date = parseISO(t)
+  		return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(),  date.getHours(), date.getMinutes(), date.getSeconds()));
+	}
+
 	return (
 		<>
 			<div
@@ -189,14 +194,14 @@ const SingleNote = (props: { note: NoteType }) => {
 				<div class="flex items-center">
 					<Show when={typeof noteData()?.updated_at === "string"}>
 						<Tooltip
-							label={`Last update ${format(
-								parseISO(noteData()?.updated_at!),
-								"MMMM dd YYY - HH:MM"
+							label={`Updated ${format(
+								localize(noteData()?.updated_at!),
+								"MMMM dd YYY"
 							)}`}
 						>
 							<span class="text-xs font-semibold opacity-50 capitalize">
 								{formatDistanceToNow(
-									parseISO(noteData()?.updated_at!),
+									localize(noteData()?.updated_at!),
 									{ addSuffix: true }
 								)}
 							</span>
