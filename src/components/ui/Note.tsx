@@ -155,9 +155,9 @@ const SingleNote = (props: { note: NoteType }) => {
 	const [fav, setFav] = createSignal(false);
 
 	onMount(() => {
-		if(typeof noteData() === "undefined" || noteData()?.id !== props.note.id){
+
 			setNoteData(props.note);
-		}
+	
 	});
 
 

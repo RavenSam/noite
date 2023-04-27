@@ -12,7 +12,7 @@ import {
   Spinner,
 } from "@hope-ui/solid";
 import {
-  FiFilter,
+  FiSliders,
   FiPlus,
   FiExternalLink,
   FiRepeat,
@@ -53,7 +53,7 @@ const FilterNotes = () => {
         as={IconButton}
         variant="outline"
         colorScheme="neutral"
-        icon={<FiFilter />}
+        icon={<FiSliders />}
       />
       <MenuContent minW="$60">
         <MenuItem icon={<FiPlus />} command="⌘T">

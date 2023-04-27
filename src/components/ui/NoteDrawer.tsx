@@ -1,5 +1,12 @@
 import SimpleEditor from "~/components/tiptap/SimpleEditor";
-import { Accessor, createSignal, onMount, Show, createResource, createEffect } from "solid-js";
+import {
+	Accessor,
+	createSignal,
+	onMount,
+	Show,
+	createResource,
+	createEffect,
+} from "solid-js";
 import { HiOutlineArrowRight } from "solid-icons/hi";
 import { FiMaximize, FiMinimize } from "solid-icons/fi";
 import {
@@ -13,17 +20,13 @@ import {
 	createDisclosure,
 	IconButton,
 } from "@hope-ui/solid";
-import { debounce } from "@solid-primitives/scheduled"
+import { debounce } from "@solid-primitives/scheduled";
 import { NoteType, updateNote } from "~/api/notes";
-import { useGlobalContext } from "~/context/store"
-
+import { useGlobalContext } from "~/context/store";
 
 const TIMEOUT = 800;
 
-
-const options = { initial_drawer_size:"lg", editor_max_width: "800px" }
-
-
+const options = { initial_drawer_size: "lg", editor_max_width: "800px" };
 
 interface DrawerProps {
 	isOpen: () => boolean;
@@ -39,7 +42,7 @@ export default function NoteDrawer(props: DrawerProps) {
 	const [title, setTitle] = createSignal("");
 	const [body, setBody] = createSignal("");
 	const [isSaving, setIsSaving] = createSignal<"saved" | boolean>(false);
-	const { setStore } = useGlobalContext()
+	const { setStore } = useGlobalContext();
 
 	onMount(() => {
 		if (props.fullScreen) {
@@ -47,36 +50,38 @@ export default function NoteDrawer(props: DrawerProps) {
 		}
 	});
 
-	createEffect(()=> setTitle(props.noteData()?.title || ""))
-	createEffect(()=> setBody(props.noteData()?.body || ""))
+	createEffect(() => setTitle(props.noteData()?.title || ""));
+	createEffect(() => setBody(props.noteData()?.body || ""));
 
-	const saving = async (body:string, newTitle?:string) => {
-		setIsSaving(true)
-		let id = props.noteData()?.id
-		if(typeof id === "undefined") throw new Error("No note id.")
+	const saving = async (body: string, newTitle?: string) => {
+		setIsSaving(true);
+		let id = props.noteData()?.id;
+		if (typeof id === "undefined") throw new Error("No note id.");
 
-		let t = newTitle ? newTitle : title()
-		const updatedNote = await updateNote(id, t, body)
+		const t = title().length > 1 ? title() : "untitled note";
+		const updatedNote = await updateNote(id, t, body);
 
-		setIsSaving("saved")
+		setIsSaving("saved");
 
-		setTimeout(() => setIsSaving(false), 3000)	
-
-	}
+		setTimeout(() => setIsSaving(false), 3000);
+	};
 
 	// Made soto keep focus
 	const handleClose = () => {
-		let id = props.noteData()?.id
-		setStore("notes", (n) => n.id === id, { title: title(), body:body() })
-		props.onClose()
-	}
+		let id = props.noteData()?.id;
+		const t = title().length > 1 ? title() : "untitled note";
+		setStore("notes", (n) => n.id === id, { title: t, body: body() });
+		props.onClose();
+	};
 
-	const triggerSaving = debounce((content:string, newTitle?:string) => saving(content, newTitle), TIMEOUT)
+	const triggerSaving = debounce(
+		(content: string, newTitle?: string) => saving(content, newTitle),
+		TIMEOUT
+	);
 
-
-	const handleTitle = (e:any) => {
-		triggerSaving(body() , e.target.value)
-		setTitle(e.target.value)
+	const handleTitle = (e: any) => {
+		triggerSaving(body(), e.target.value);
+		setTitle(e.target.value);
 	};
 
 	return (
@@ -86,17 +91,32 @@ export default function NoteDrawer(props: DrawerProps) {
 			// @ts-ignore
 			size={fullScreen() ? "full" : options.initial_drawer_size}
 			placement="right"
-			// onClose={props.onClose}
 		>
 			<DrawerOverlay />
 			<DrawerContent pos="relative" class="!py-8">
-				<DrawerHeader bgColor="$backgroundC" class="sticky z-[2] top-[1.5rem] flex items-center" >
-					<input type="text" value={title()} onChange={handleTitle} class="border-none font-bold flex-1 bg-transparent outline-none"/>
+				<DrawerHeader
+					bgColor="$backgroundC"
+					class="sticky z-[2] top-[1.5rem] flex items-center space-x-3 max-w-7xl mx-auto w-full"
+				>
+					<input
+						placeholder="Note title"
+						type="text"
+						value={title()}
+						oninput={handleTitle}
+						class="border-none font-bold flex-1 bg-transparent outline-none"
+					/>
 
-
-					<Show when={isSaving()} >
-						<span class={`text-sm right-[7rem] py-2 ${isSaving() !== "saved" ? "animate-fadeInOut" : "opacity-70" }`} >
-							<Show when={isSaving() === "saved"} fallback="Saving" >Saved</Show>
+					<Show when={isSaving()}>
+						<span
+							class={`text-sm right-[7rem] py-2 ${
+								isSaving() !== "saved"
+									? "animate-fadeInOut"
+									: "opacity-70"
+							}`}
+						>
+							<Show when={isSaving() === "saved"} fallback="Saving">
+								Saved
+							</Show>
 						</span>
 					</Show>
 
@@ -114,16 +134,20 @@ export default function NoteDrawer(props: DrawerProps) {
 						size="lg"
 						icon={<HiOutlineArrowRight />}
 					/>
+				</DrawerHeader>
 
-					
-					</DrawerHeader>
-
-					<DrawerBody class="" >
-						<div style={{ "max-width": options.editor_max_width }} class="max-w-full mx-auto">
-							<SimpleEditor noteData={props.noteData} setBody={setBody} triggerSaving={triggerSaving} />
-						</div>
-					</DrawerBody>
-
+				<DrawerBody class="">
+					<div
+						style={{ "max-width": options.editor_max_width }}
+						class="max-w-full mx-auto"
+					>
+						<SimpleEditor
+							noteData={props.noteData}
+							setBody={setBody}
+							triggerSaving={triggerSaving}
+						/>
+					</div>
+				</DrawerBody>
 			</DrawerContent>
 		</Drawer>
 	);
