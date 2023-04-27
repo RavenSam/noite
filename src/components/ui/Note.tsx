@@ -16,7 +16,7 @@ import {
 	Tooltip,
 } from "@hope-ui/solid";
 import { HiSolidPlus } from "solid-icons/hi";
-import { createSignal, Show, lazy, createEffect } from "solid-js";
+import { createSignal, Show, lazy, createEffect, onMount } from "solid-js";
 import {
 	createNote,
 	NoteType,
@@ -154,8 +154,10 @@ const SingleNote = (props: { note: NoteType }) => {
 	const [noteData, setNoteData] = createSignal<NoteType>();
 	const [fav, setFav] = createSignal(false);
 
-	createEffect(() => {
-		setNoteData(props.note);
+	onMount(() => {
+		if(typeof noteData() === "undefined" || noteData()?.id !== props.note.id){
+			setNoteData(props.note);
+		}
 	});
 
 

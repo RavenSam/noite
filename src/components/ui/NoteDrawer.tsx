@@ -57,32 +57,45 @@ export default function NoteDrawer(props: DrawerProps) {
 
 		let t = newTitle ? newTitle : title()
 		const updatedNote = await updateNote(id, t, body)
-		setStore("notes", (n) => n.id === id, { title: t, body })
 
 		setIsSaving("saved")
 
-		setTimeout(() => setIsSaving(false), 3000)		
+		setTimeout(() => setIsSaving(false), 3000)	
 
+	}
+
+	// Made soto keep focus
+	const handleClose = () => {
+		let id = props.noteData()?.id
+		setStore("notes", (n) => n.id === id, { title: title(), body:body() })
+		props.onClose()
 	}
 
 	const triggerSaving = debounce((content:string, newTitle?:string) => saving(content, newTitle), TIMEOUT)
 
 
-	const handleTitle = (e:any) => triggerSaving(body() , e.target.value);
+	const handleTitle = (e:any) => {
+		triggerSaving(body() , e.target.value)
+		setTitle(e.target.value)
+	};
 
 	return (
 		<Drawer
+			onClose={handleClose}
 			opened={props.isOpen()}
 			// @ts-ignore
 			size={fullScreen() ? "full" : options.initial_drawer_size}
 			placement="right"
-			onClose={props.onClose}
+			// onClose={props.onClose}
 		>
 			<DrawerOverlay />
-			<DrawerContent>
-				<div class="mt-10 relative">
+			<DrawerContent pos="relative" class="!py-8">
+				<DrawerHeader bgColor="$backgroundC" class="sticky z-[2] top-[1.5rem] flex items-center" >
+					<input type="text" value={title()} onChange={handleTitle} class="border-none font-bold flex-1 bg-transparent outline-none"/>
+
+
 					<Show when={isSaving()} >
-						<span class={`text-sm absolute right-[7rem] top-[1rem] py-2 ${isSaving() !== "saved" ? "animate-fadeInOut" : "opacity-70" }`} >
+						<span class={`text-sm right-[7rem] py-2 ${isSaving() !== "saved" ? "animate-fadeInOut" : "opacity-70" }`} >
 							<Show when={isSaving() === "saved"} fallback="Saving" >Saved</Show>
 						</span>
 					</Show>
@@ -91,31 +104,26 @@ export default function NoteDrawer(props: DrawerProps) {
 						onClick={() => setFullScreen((prev) => !prev)}
 						colorScheme="neutral"
 						variant="ghost"
-						pos="absolute"
-						right="4rem"
-						top="1rem"
 						aria-label="Expand"
 						icon={fullScreen() ? <FiMinimize /> : <FiMaximize />}
 					/>
 
 					<DrawerCloseButton
 						borderRadius="0.75rem"
+						pos="unset"
 						size="lg"
 						icon={<HiOutlineArrowRight />}
 					/>
 
-					<DrawerHeader maxW="70%">
-						<input type="text" value={title()} onChange={handleTitle} class="border-none font-bold w-full bg-transparent outline-none"/>
+					
 					</DrawerHeader>
 
 					<DrawerBody class="" >
-						<div style={{ "max-width": options.editor_max_width }} class="max-w-full mx-auto h-full max-h-full !overflow-y-scroll">
+						<div style={{ "max-width": options.editor_max_width }} class="max-w-full mx-auto">
 							<SimpleEditor noteData={props.noteData} setBody={setBody} triggerSaving={triggerSaving} />
 						</div>
 					</DrawerBody>
 
-					<DrawerFooter></DrawerFooter>
-				</div>
 			</DrawerContent>
 		</Drawer>
 	);

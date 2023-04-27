@@ -4,7 +4,7 @@
 
 #simple-editor > div {
    width: 100%;
-   min-height: 80vh;
+   min-height: 70vh;
    max-height: 100%;
    outline: none;
 }
