@@ -21,6 +21,7 @@ export const config: HopeThemeConfig = {
 		Button: {
 			baseStyle: {
 				root: {
+					_focus: { boxShadow: "none" },
 					borderRadius: "0.75rem",
 					fontWeight:"700"
 				},
@@ -31,6 +32,11 @@ export const config: HopeThemeConfig = {
 			baseStyle:{
 				input:{
 					borderRadius: "0.75rem",
+
+					_focus:{
+						boxShadow:"none",
+						borderColor:"$primary"
+					},
 				}
 			}
 		},

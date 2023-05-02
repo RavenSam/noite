@@ -46,14 +46,14 @@ export default function SideNav(props: SideNavProps) {
 		<>
 			<main
 				style={{ "margin-left": menuWidth() }}
-				class="p-2 mt-10"
+				class="p-2 pt-12"
 			>
 				<div class="max-w-6xl mx-auto">{props.children}</div>
 			</main>
 
 			<div
 				style={{ width: menuWidth() }}
-				class="fixed top-0 left-0 bottom-0 mt-10"
+				class="fixed top-0 left-0 bottom-0 pt-10"
 			>
 				<nav class="flex flex-col px-2 py-4 h-full space-y-1">
 					<For each={mainPages}>{(item) => <LinkItem item={item} />}</For>

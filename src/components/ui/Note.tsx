@@ -149,26 +149,48 @@ const NoteOption = (props: { noteId: number }) => {
 	);
 };
 
+const Favorited = () => {
+	const [fav, setFav] = createSignal(false);
+
+	const handleFav = (e: any) => {
+		e.stopPropagation();
+		setFav((prev) => !prev);
+	};
+
+	return (
+		<IconButton
+			aria-label="Favorite"
+			variant="ghost"
+			marginRight="5px"
+			fontSize="1.2rem"
+			onClick={handleFav}
+			colorScheme={fav() ? "warning" : "neutral"}
+			icon={<FiStar fill={fav() ? "#ffb224" : "transparent"} />}
+			class="!bg-transparent"
+		/>
+	);
+};
+
 const SingleNote = (props: { note: NoteType }) => {
 	const { isOpen, onOpen, onClose } = createDisclosure();
 	const [noteData, setNoteData] = createSignal<NoteType>();
-	const [fav, setFav] = createSignal(false);
 
 	onMount(() => {
-
-			setNoteData(props.note);
-	
+		setNoteData(props.note);
 	});
 
-
-	const handleFav = (e:any) =>{
-		e.stopPropagation()
-		setFav(prev => !prev)
-	}
-
-	function localize(t:string){
-		const date = parseISO(t)
-  		return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(),  date.getHours(), date.getMinutes(), date.getSeconds()));
+	function localize(t: string) {
+		const date = parseISO(t);
+		return new Date(
+			Date.UTC(
+				date.getFullYear(),
+				date.getMonth(),
+				date.getDate(),
+				date.getHours(),
+				date.getMinutes(),
+				date.getSeconds()
+			)
+		);
 	}
 
 	return (
@@ -196,12 +218,12 @@ const SingleNote = (props: { note: NoteType }) => {
 				<div class="flex items-center">
 					<Show when={typeof noteData()?.updated_at === "string"}>
 						<Tooltip
-							label={`Updated ${format(
+							label={<span>Updated {format(
 								localize(noteData()?.updated_at!),
-								"MMMM dd YYY"
-							)}`}
+								"MMMM dd,  YYY - hh:mm"
+							)}</span>}
 						>
-							<span class="text-xs font-semibold opacity-50 capitalize">
+							<span class="text-xs font-semibold opacity-50">
 								{formatDistanceToNow(
 									localize(noteData()?.updated_at!),
 									{ addSuffix: true }
@@ -210,16 +232,9 @@ const SingleNote = (props: { note: NoteType }) => {
 						</Tooltip>
 					</Show>
 
-					<IconButton
-						aria-label="Favorite"
-						variant="ghost"
-						marginRight="5px"
-						fontSize="1.2rem"
-						onClick={handleFav}
-						colorScheme={fav() ? "warning" : "neutral"}
-						icon={<FiStar fill={fav() ? "#ffb224" : "transparent"} />}
-						class="ml-auto !bg-transparent"
-					/>
+					<div class="mx-auto "/>
+
+					{/*<Favorited />*/}
 
 					<NoteOption noteId={noteData()?.id!} />
 				</div>
