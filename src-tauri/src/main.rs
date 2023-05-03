@@ -17,9 +17,9 @@ pub mod db;
 
 
 #[tauri::command]
-fn note_create(title: String, body: String, state: tauri::State<AppState>) -> String {
+fn note_create(title: String, body: String, folder : Option<i32>, state: tauri::State<AppState>) -> String {
     let conn = state.conn.lock().unwrap();
-    db::note_create(&conn, &title, &body).to_string()
+    db::note_create(&conn, &title, &body, folder)
 }
 
 
@@ -28,6 +28,10 @@ fn notes_list(state: tauri::State<AppState>) -> String{
     let con = state.conn.lock().unwrap();
     db::notes_list(&con)
 }
+
+
+
+
 
 #[tauri::command]
 fn update_note(id: i32, title: String, body: String, state: tauri::State<AppState>) -> String{
@@ -48,6 +52,18 @@ fn delete_note(id: i32, state: tauri::State<AppState>) -> String {
     String::from("")
 }
 
+#[tauri::command]
+fn create_folder(title: String, state: tauri::State<AppState>) -> String {
+    let conn = state.conn.lock().unwrap();
+    db::create_folder(&conn, &title)
+}
+
+#[tauri::command]
+fn folders_list(state: tauri::State<AppState>) -> String{
+    let con = state.conn.lock().unwrap();
+    db::folders_list(&con)
+}
+
 
 struct AppState {
     conn: Mutex<SqliteConnection>,
@@ -64,7 +80,15 @@ fn main() {
 
     tauri::Builder::default()
         .manage(state)
-        .invoke_handler(tauri::generate_handler![delete_note, notes_list, note_create, update_note, update_accent])
+        .invoke_handler(tauri::generate_handler![
+            delete_note, 
+            notes_list, 
+            note_create, 
+            update_note, 
+            update_accent, 
+            create_folder, 
+            folders_list
+            ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
