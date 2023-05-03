@@ -1,11 +1,14 @@
 import { A, useLocation } from "@solidjs/router";
 import { JSXElement, createSignal, For } from "solid-js";
-import { HiOutlineCog, HiOutlinePencilAlt } from "solid-icons/hi";
+import { HiOutlineCog, HiOutlinePencilAlt, HiOutlineFolder } from "solid-icons/hi";
 import { Tooltip } from "@hope-ui/solid";
 import ColorModeSwitcher from "~/components/ui/ColorModeSwitcher";
 
 const mainPages = [
 	{ name: "My Notes", icon: <HiOutlinePencilAlt />, path: "/", class: "" },
+	{ name: "My Folders", icon: <HiOutlineFolder />, path: "/folders", class: "" },
+
+	
 	{
 		name: "Settings",
 		icon: <HiOutlineCog />,

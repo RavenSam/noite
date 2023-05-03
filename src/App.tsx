@@ -9,6 +9,8 @@ import { GlobalContextProvider } from "~/context/store";
 
 const Notes = lazy(() => import("~/pages/Notes"));
 const Settings = lazy(() => import("~/pages/Settings"));
+const Folders = lazy(() => import("~/pages/Folders"));
+const Folder = lazy(() => import("~/pages/Folder"));
 
 export default function App() {
    return (
@@ -22,6 +24,10 @@ export default function App() {
                   <SideNav>
                      <Routes>
                         <Route path="/settings" component={Settings} />
+
+                        <Route path="/folders" component={Folders} />
+
+                        <Route path="/folders/:id" component={Folder} />
 
                         <Route path="/" component={Notes} />
                      </Routes>

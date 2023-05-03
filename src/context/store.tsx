@@ -1,18 +1,23 @@
-import { createContext, useContext } from "solid-js";
+import { JSXElement, createContext, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 import type { SetStoreFunction } from "solid-js/store";
 import type { NoteType } from "~/api/notes"
+import type { FolderType } from "~/api/folders"
+
+type FolderNotesType = FolderType & { notes: NoteType[] }
+
+type StoreType = { notes: NoteType[], folders:FolderNotesType[] }
 
 interface ContextProps{
-	store: {notes: NoteType[]}
-	setStore: SetStoreFunction<{notes: NoteType[]}>
+	store: StoreType
+	setStore: SetStoreFunction<StoreType>
 }
 
 
 export const GlobalContext = createContext<ContextProps>();
 
-export function GlobalContextProvider(props) {
-	const [store, setStore] = createStore<{notes:NoteType[]}>({notes: []});
+export function GlobalContextProvider(props:{ children:JSXElement }) {
+	const [store, setStore] = createStore<StoreType>({ notes: [], folders: [] });
 
 
 	return (
