@@ -212,6 +212,8 @@ const NoteOption = (props: { noteId: number }) => {
 				marginRight="-10px"
 				fontSize="1.2rem"
 				colorScheme="neutral"
+				class="opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+				_hover={{ bgColor:"transparent" }}
 				onClick={(e: any) => e.stopPropagation()}
 				icon={<FiMoreHorizontal />}
 			/>

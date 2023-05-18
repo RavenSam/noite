@@ -25,13 +25,22 @@ export default function Folder() {
 					<Tab>Folders</Tab>
 				</TabList>
 				<TabPanel tabIndex="-1">
-					<div class="space-y-4">
-						<NewFolder />
-						<For each={folders()} fallback={<EmptyFolders />}>
-							{(folder) => (
-								<A href={`/folders/${folder.id}`} class="rounded-xl border p-4">{folder.title}</A>
-							)}
-						</For>
+					<div >
+						<div class="flex items-center justify-end pb-5 pt-1 space-x-3">
+							<NewFolder />
+						</div>
+						<div class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
+							<For each={folders()} fallback={<EmptyFolders />}>
+								{(folder) => (
+									<A
+										href={`/folders/${folder.id}`}
+										class="rounded-xl border p-4"
+									>
+										{folder.title}
+									</A>
+								)}
+							</For>
+						</div>
 					</div>
 				</TabPanel>
 			</Tabs>
