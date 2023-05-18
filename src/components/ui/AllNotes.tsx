@@ -1,4 +1,4 @@
-import { Show, For, Resource, createSignal, createEffect } from "solid-js";
+import { Show, For, Resource, createSignal, createEffect, Accessor, Setter } from "solid-js";
 import {
   Menu,
   MenuTrigger,
@@ -27,8 +27,9 @@ import { NewNote, SingleNote } from "~/components/ui/Note";
 import { NoteType } from "~/api/notes";
 import { useGlobalContext, SORT_OPTIONS, FilterNotesType } from "~/context/store";
 
+type SearchNotesProps = { search: Accessor<string>,  setSearch: Setter<string> }
 
-const SearchNotes = () => {
+const SearchNotes = (props:SearchNotesProps) => {
   const [searching, setSearching] = createSignal(false);
 
   return (
@@ -37,7 +38,10 @@ const SearchNotes = () => {
       <FiSearch opacity=".5" />
     </InputLeftElement>
 
-      <Input placeholder="Search notes" />
+      <Input 
+      type="Search" 
+      oninput={(e)=> props.setSearch(e.target.value)} 
+      value={props.search()} placeholder="Search notes" />
 
       <Show when={searching()}>
         <InputRightElement pointerEvents="none">
@@ -95,7 +99,7 @@ const FilterNotes = () => {
   );
 };
 
-const backedNotes = (notes:NoteType[], filter_notes:FilterNotesType) => {
+const backedNotes = (notes:NoteType[], filter_notes:FilterNotesType, search: Accessor<string>) => {
   const filtered = notes.filter(n => filter_notes.inFolder ? n : n.folder == null )
 
   const sorted = filtered.sort((a, b)=>{
@@ -127,7 +131,11 @@ const backedNotes = (notes:NoteType[], filter_notes:FilterNotesType) => {
     }
   })
 
-  return sorted
+  const searched = notes.filter(n => n.title.toLowerCase().includes(search().toLowerCase()))
+
+
+
+  return search().length > 0 ? searched :  sorted
 }
 
 interface AllNotesProps {
@@ -137,11 +145,12 @@ interface AllNotesProps {
 
 export default function AllNotes(props: AllNotesProps) {
   const { store, setStore } = useGlobalContext();
+  const [search, setSearch] = createSignal("")
 
   return (
     <div class="">
       <div class="flex items-center justify-end pb-5 pt-1 space-x-3">
-        <SearchNotes />
+        <SearchNotes search={search} setSearch={setSearch} />
 
         <FilterNotes />
 
@@ -149,7 +158,7 @@ export default function AllNotes(props: AllNotesProps) {
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
-        <For each={backedNotes(props.data, store.filter_notes)}>{(note) => <SingleNote note={note} />}</For>
+        <For each={backedNotes(props.data, store.filter_notes, search)}>{(note) => <SingleNote note={note} />}</For>
       </div>
     </div>
   );
