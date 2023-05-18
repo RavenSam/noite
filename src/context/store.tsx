@@ -6,7 +6,11 @@ import type { FolderType } from "~/api/folders"
 
 type FolderNotesType = FolderType & { notes: NoteType[] }
 
-type StoreType = { notes: NoteType[], folders:FolderNotesType[] }
+export type SORT_OPTIONS = "edited_desc" | "edited_asc" | "created_desc" | "created_asc" 
+
+export type FilterNotesType = { inFolder: boolean, sort: SORT_OPTIONS }
+
+type StoreType = { notes: NoteType[], folders:FolderNotesType[], filter_notes: FilterNotesType }
 
 interface ContextProps{
 	store: StoreType
@@ -17,7 +21,11 @@ interface ContextProps{
 export const GlobalContext = createContext<ContextProps>();
 
 export function GlobalContextProvider(props:{ children:JSXElement }) {
-	const [store, setStore] = createStore<StoreType>({ notes: [], folders: [] });
+	const [store, setStore] = createStore<StoreType>({ 
+		notes: [], 
+		folders: [], 
+		filter_notes: { inFolder:false, sort: "edited_desc" } 
+	});
 
 
 	return (

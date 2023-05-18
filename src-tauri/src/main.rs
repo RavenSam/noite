@@ -59,7 +59,7 @@ fn create_folder(title: String, state: tauri::State<AppState>) -> String {
 }
 
 #[tauri::command]
-fn folders_list(state: tauri::State<AppState>) -> String{
+fn folders_list(state: tauri::State<AppState>) -> String {
     let con = state.conn.lock().unwrap();
     db::folders_list(&con)
 }

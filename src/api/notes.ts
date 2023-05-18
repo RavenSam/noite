@@ -10,6 +10,8 @@ export type NoteType = {
 	words_count: number;
 	created_at:string;
 	updated_at:string;
+	folder:string;
+	favorited:boolean;
 };
 
 export const fetchNotes = async () => {

@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 
-@layer base {
+/*@layer base {
   button:focus-visible, input:focus-visible, a:focus-visible, div:focus-visible {
     @apply !ring-2 !ring-sky-500 !outline-none;
   }
-}
+}*/
 
 
 #simple-editor > div {
