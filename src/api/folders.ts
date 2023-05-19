@@ -1,11 +1,13 @@
 import { invoke } from "@tauri-apps/api";
 import { createResource, createSignal, createEffect } from "solid-js";
+import { notificationService } from '@hope-ui/solid'
+
 
 export type FolderType = {
 	id: number;
 	title: string;
-	created_at:string;
-	updated_at:string;
+	created_at: string;
+	updated_at: string;
 };
 
 export const fetchFolders = async () => {
@@ -16,15 +18,45 @@ export const fetchFolders = async () => {
 
 const [folders, { mutate, refetch }] = createResource(fetchFolders);
 
-
-	export async function createFolder(title: string) {
+export async function createFolder(title: string) {
 	try {
 		const string_data: string = await invoke("create_folder", { title });
-		const newFolder:FolderType = await JSON.parse(string_data);
+		const newFolder: FolderType = await JSON.parse(string_data);
 		refetch();
 		return { newFolder, error: false };
 	} catch (e: any) {
 		console.log(e);
+		return { error: e };
+	}
+}
+
+export async function updateFolder(id: number, title: string) {
+	try {
+		const string_data: string = await invoke("update_folder", { id, title });
+		const updated_data: FolderType = await JSON.parse(string_data);
+		refetch()
+		return { updated_data, error: false };
+	} catch (e: any) {
+		console.log(e);
+		return { error: e };
+	}
+}
+
+export async function deleteFolder(id: number) {
+	try {
+		const string_data: string = await invoke("delete_folder", { id });
+		notificationService.show({
+			status: "success",
+			title: "Folder deleted successfully",
+		});
+		refetch();
+		return { error: false };
+	} catch (e: any) {
+		console.log(e);
+		notificationService.show({
+			status: "danger",
+			title: "Couldn't delete folder",
+		});
 		return { error: e };
 	}
 }
