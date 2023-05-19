@@ -123,3 +123,35 @@ pub fn folders_list(conn: &SqliteConnection) -> String {
     let serialized = serde_json::to_string(&all_folders).unwrap();
     serialized
 }
+
+// Udate foolder -- title
+pub fn update_folder(conn: &SqliteConnection, qid: i32, new_title: &str) -> String {
+    use folders::dsl::{ id, title };
+
+    folders::dsl::folders
+        .filter(id.eq(&qid))
+        .first::<Folder>(conn)
+        .expect("Folder not found");
+
+    diesel::update(folders::dsl::folders.filter(id.eq(&qid)))
+        .set((
+            title.eq(new_title),
+        ))
+        .execute(conn)
+        .expect("Error updating");
+
+    let updated = folders::dsl::folders
+        .filter(id.eq(&qid))
+        .first::<Folder>(conn)
+        .expect("Folder not found");
+
+    serde_json::to_string(&updated).unwrap()
+}
+
+pub fn delete_folder(conn: &SqliteConnection, qid: i32) {
+    use folders::dsl::{ id };
+    let t = folders::dsl::folders.filter(id.eq(&qid));
+    diesel::delete(t)
+        .execute(conn)
+        .expect("Error deleting folder");
+}

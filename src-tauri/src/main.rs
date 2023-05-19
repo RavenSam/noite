@@ -30,9 +30,6 @@ fn notes_list(state: tauri::State<AppState>) -> String{
 }
 
 
-
-
-
 #[tauri::command]
 fn update_note(id: i32, title: String, body: String, state: tauri::State<AppState>) -> String{
     let conn = state.conn.lock().unwrap();
@@ -52,6 +49,8 @@ fn delete_note(id: i32, state: tauri::State<AppState>) -> String {
     String::from("")
 }
 
+// -------------------------------------------
+// Folders Commands
 #[tauri::command]
 fn create_folder(title: String, state: tauri::State<AppState>) -> String {
     let conn = state.conn.lock().unwrap();
@@ -62,6 +61,19 @@ fn create_folder(title: String, state: tauri::State<AppState>) -> String {
 fn folders_list(state: tauri::State<AppState>) -> String {
     let con = state.conn.lock().unwrap();
     db::folders_list(&con)
+}
+
+#[tauri::command]
+fn update_folder(id: i32, title: String, state: tauri::State<AppState>) -> String{
+    let conn = state.conn.lock().unwrap();
+    db::update_folder(&conn, id, &title)
+}
+
+#[tauri::command]
+fn delete_folder(id: i32, state: tauri::State<AppState>) -> String {
+    let conn = state.conn.lock().unwrap();
+    db::delete_folder(&conn, id);
+    String::from("")
 }
 
 
@@ -87,7 +99,9 @@ fn main() {
             update_note, 
             update_accent, 
             create_folder, 
-            folders_list
+            folders_list,
+            update_folder,
+            delete_folder
             ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
