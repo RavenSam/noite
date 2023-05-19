@@ -4,7 +4,10 @@ import type { SetStoreFunction } from "solid-js/store";
 import type { NoteType } from "~/api/notes"
 import type { FolderType } from "~/api/folders"
 
-type FolderNotesType = FolderType & { notes: NoteType[] }
+// type FolderNotesType = FolderType & { notes: NoteType[] }
+type FolderNotesType = FolderType
+
+
 
 export type SORT_OPTIONS = "edited_desc" | "edited_asc" | "created_desc" | "created_asc" 
 

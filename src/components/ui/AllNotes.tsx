@@ -99,6 +99,20 @@ const FilterNotes = () => {
   );
 };
 
+type EmptyNotesProps = {
+  msg?:string
+  folderId?:number
+}
+
+export const EmptyNotes = (props:EmptyNotesProps) => {
+  return (
+    <div class="flex items-center flex-col space-y-8 justify-center min-h-[5rem]">
+      <h2 class="font-normal text-xl">{props.msg || "No note found. Create one?"}</h2>
+      <NewNote folderId={props.folderId}/>
+    </div>
+  );
+};
+
 const backedNotes = (notes:NoteType[], filter_notes:FilterNotesType, search: Accessor<string>) => {
   const filtered = notes.filter(n => filter_notes.inFolder ? n : n.folder == null )
 

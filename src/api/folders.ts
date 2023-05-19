@@ -8,13 +8,13 @@ export type FolderType = {
 	updated_at:string;
 };
 
-export const fetchFolder = async () => {
+export const fetchFolders = async () => {
 	const string_data: string = await invoke("folders_list");
 	const folder: FolderType[] = await JSON.parse(string_data);
 	return folder;
 };
 
-const [folders, { mutate, refetch }] = createResource(fetchFolder);
+const [folders, { mutate, refetch }] = createResource(fetchFolders);
 
 
 	export async function createFolder(title: string) {

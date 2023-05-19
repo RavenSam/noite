@@ -10,7 +10,7 @@ export type NoteType = {
 	words_count: number;
 	created_at:string;
 	updated_at:string;
-	folder:string;
+	folder:number;
 	favorited:boolean;
 };
 
@@ -22,9 +22,9 @@ export const fetchNotes = async () => {
 
 const [data, { mutate, refetch }] = createResource(fetchNotes);
 
-export async function createNote(title: string, body: string) {
+export async function createNote(title: string, body: string, folderId?:number) {
 	try {
-		const string_data: string = await invoke("note_create", { title, body });
+		const string_data: string = await invoke("note_create", { title, body, folder:folderId });
 		const newNote: NoteType = await JSON.parse(string_data);
 		refetch();
 		return { newNote, error: false };

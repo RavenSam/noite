@@ -1,8 +1,11 @@
 import { Tabs, TabList, Tab, TabPanel } from "@hope-ui/solid";
 import { NewFolder } from "~/components/ui/Note";
-import { For } from "solid-js";
+import { For, createEffect } from "solid-js";
 import { folders } from "~/api/folders";
 import { A } from "@solidjs/router";
+import { HiSolidFolder } from "solid-icons/hi";
+import { useGlobalContext } from "~/context/store";
+
 
 const EmptyFolders = () => {
 	return (
@@ -14,6 +17,10 @@ const EmptyFolders = () => {
 };
 
 export default function Folder() {
+	const { store, setStore } = useGlobalContext();
+
+	createEffect(() => setStore("folders", () => [...(folders() || [])]));
+
 	return (
 		<div>
 			<h1 class="text-3xl tracking-wider font-extrabold py-4 leading-none">
@@ -25,18 +32,23 @@ export default function Folder() {
 					<Tab>Folders</Tab>
 				</TabList>
 				<TabPanel tabIndex="-1">
-					<div >
+					<div>
 						<div class="flex items-center justify-end pb-5 pt-1 space-x-3">
 							<NewFolder />
 						</div>
-						<div class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
-							<For each={folders()} fallback={<EmptyFolders />}>
+						<div class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+							<For each={store.folders} fallback={<EmptyFolders />}>
 								{(folder) => (
 									<A
 										href={`/folders/${folder.id}`}
-										class="rounded-xl border p-4"
+										class="rounded-xl flex flex-col items-center p-4 hover:bg-gradient-to-b from-blue-500 to-blue-600/80 hover:shadow-xl"
 									>
-										{folder.title}
+
+										<HiSolidFolder
+											size="100%"
+											class="aspect-square -mb-5 "
+										/>
+										<span>{folder.title}</span>
 									</A>
 								)}
 							</For>

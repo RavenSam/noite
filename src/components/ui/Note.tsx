@@ -14,9 +14,10 @@ import {
 	ModalBody,
 	ModalFooter,
 	Tooltip,
-	Input
+	Input,
 } from "@hope-ui/solid";
 import { HiSolidPlus } from "solid-icons/hi";
+import { FiFolder } from "solid-icons/fi";
 import { createSignal, Show, lazy, createEffect, onMount } from "solid-js";
 import {
 	createNote,
@@ -24,26 +25,24 @@ import {
 	deleteNote,
 	updateNoteAccent,
 } from "~/api/notes";
-import { createFolder } from "~/api/folders"
+import { createFolder } from "~/api/folders";
 import NoteDrawer from "~/components/ui/NoteDrawer";
 import { FiMoreHorizontal, FiTrash2, FiPenTool, FiStar } from "solid-icons/fi";
 import { useGlobalContext } from "~/context/store";
 import { format, formatDistanceToNow, parseISO, addMinutes } from "date-fns";
-import { useNavigate } from "@solidjs/router";
+import { useNavigate, useLocation, A } from "@solidjs/router";
 
-
-export const NewFolder = () =>{
+export const NewFolder = () => {
 	const { isOpen, onOpen, onClose } = createDisclosure();
-	const [title, setTitle] = createSignal("")
-	const navigate = useNavigate()
+	const [title, setTitle] = createSignal("");
+	const navigate = useNavigate();
 
-		const handleNewFolder = async () => {
+	const handleNewFolder = async () => {
 		const { newFolder, error } = await createFolder(title());
 
 		if (newFolder) {
-
 			// Redirect to folder page :folderid
-			onClose()
+			onClose();
 			navigate(`/folders/${newFolder.id}`);
 		} else {
 			// Send a notif
@@ -74,11 +73,17 @@ export const NewFolder = () =>{
 					<ModalCloseButton />
 					<ModalHeader>Delete note</ModalHeader>
 					<ModalBody>
-						<form onSubmit={e=>{
-							e.preventDefault()
-							handleNewFolder()
-						}}>
-							<Input id="folder_title" onChange={e=> setTitle(e.target.value)} placeholder="Search notes" />
+						<form
+							onSubmit={(e) => {
+								e.preventDefault();
+								handleNewFolder();
+							}}
+						>
+							<Input
+								id="folder_title"
+								onChange={(e) => setTitle(e.target.value)}
+								placeholder="Search notes"
+							/>
 						</form>
 					</ModalBody>
 					<ModalFooter class="space-x-3">
@@ -89,10 +94,7 @@ export const NewFolder = () =>{
 						>
 							Cancel
 						</Button>
-						<Button
-							onClick={handleNewFolder}
-							colorScheme="success"
-						>
+						<Button onClick={handleNewFolder} colorScheme="success">
 							Save
 						</Button>
 					</ModalFooter>
@@ -100,8 +102,7 @@ export const NewFolder = () =>{
 			</Modal>
 		</>
 	);
-}
-
+};
 
 const DeleteNote = (props: { noteId: number }) => {
 	const { isOpen, onOpen, onClose } = createDisclosure();
@@ -213,7 +214,7 @@ const NoteOption = (props: { noteId: number }) => {
 				fontSize="1.2rem"
 				colorScheme="neutral"
 				class="opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
-				_hover={{ bgColor:"transparent" }}
+				_hover={{ bgColor: "transparent" }}
 				onClick={(e: any) => e.stopPropagation()}
 				icon={<FiMoreHorizontal />}
 			/>
@@ -251,6 +252,7 @@ const Favorited = () => {
 const SingleNote = (props: { note: NoteType }) => {
 	const { isOpen, onOpen, onClose } = createDisclosure();
 	const [noteData, setNoteData] = createSignal<NoteType>();
+	const location = useLocation();
 
 	onMount(() => {
 		setNoteData(props.note);
@@ -283,8 +285,17 @@ const SingleNote = (props: { note: NoteType }) => {
 					class="absolute inset-0 -z-10 opacity-0 duration-300 group-hover:opacity-10"
 				/>
 
-				<div class="flex items-center justify-between">
-					<h2 class="font-semibold">{noteData()?.title}</h2>
+				<div class="flex items-center justify-between space-x-2">
+					<h2 class="font-semibold truncate" title={noteData()?.title}>{noteData()?.title}</h2>
+
+					<Show when={location.pathname === "/" && noteData()?.folder}>
+						<A 
+						onClick={(e: any) => e.stopPropagation()}
+						href={`/folders/${noteData()?.folder}`} 
+						class="text-sky-600 opacity-50 hover:opacity-100 p-1">
+							<FiFolder/>
+						</A>
+					</Show>
 				</div>
 
 				<div
@@ -295,10 +306,15 @@ const SingleNote = (props: { note: NoteType }) => {
 				<div class="flex items-center">
 					<Show when={typeof noteData()?.updated_at === "string"}>
 						<Tooltip
-							label={<span>Updated {format(
-								localize(noteData()?.updated_at!),
-								"MMMM dd,  YYY - hh:mm"
-							)}</span>}
+							label={
+								<span>
+									Updated{" "}
+									{format(
+										localize(noteData()?.updated_at!),
+										"MMMM dd,  YYY - hh:mm"
+									)}
+								</span>
+							}
 						>
 							<span class="text-xs font-semibold opacity-50">
 								{formatDistanceToNow(
@@ -309,7 +325,7 @@ const SingleNote = (props: { note: NoteType }) => {
 						</Tooltip>
 					</Show>
 
-					<div class="mx-auto "/>
+					<div class="mx-auto " />
 
 					{/*<Favorited />*/}
 
@@ -322,13 +338,21 @@ const SingleNote = (props: { note: NoteType }) => {
 	);
 };
 
-const NewNote = () => {
+type NewNoteProps = {
+	folderId?: number;
+};
+
+const NewNote = (props: NewNoteProps) => {
 	const { isOpen, onOpen, onClose } = createDisclosure();
 	const [noteData, setNoteData] = createSignal<NoteType>();
 	const { setStore } = useGlobalContext();
 
 	const handleNewNote = async () => {
-		const { newNote, error } = await createNote("Note", "<p></p>");
+		const { newNote, error } = await createNote(
+			"Note",
+			"<p></p>",
+			props.folderId
+		);
 
 		if (newNote) {
 			setNoteData(newNote);
