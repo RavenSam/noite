@@ -2,13 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /*@layer base {
   button:focus-visible, input:focus-visible, a:focus-visible, div:focus-visible {
     @apply !ring-2 !ring-sky-500 !outline-none;
   }
 }*/
-
 
 #simple-editor > div {
    width: 100%;
@@ -83,9 +81,13 @@
    bottom: 0;
    position: absolute;
    z-index: 10;
-   background: -webkit-linear-gradient(
-      bottom,
-      var(--hope-colors-background) 0%,
-      transparent 100%
-   );
+   background: -webkit-linear-gradient(bottom, var(--hope-colors-background) 0%, transparent 100%);
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+   padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+   border: none;
+   border-radius: 0.75rem;
 }

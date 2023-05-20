@@ -27,7 +27,7 @@ export function GlobalContextProvider(props:{ children:JSXElement }) {
 	const [store, setStore] = createStore<StoreType>({ 
 		notes: [], 
 		folders: [], 
-		filter_notes: { inFolder:false, sort: "edited_desc" } 
+		filter_notes: { inFolder: true, sort: "edited_desc" } 
 	});
 
 
