@@ -8,8 +8,10 @@ import {
    DrawerCloseButton,
    DrawerContent,
    DrawerHeader,
+   DrawerFooter,
    DrawerOverlay,
    IconButton,
+   Badge
 } from "@hope-ui/solid"
 import { debounce } from "@solid-primitives/scheduled"
 import { NoteType, updateNote } from "~/api/notes"
@@ -30,6 +32,7 @@ export default function NoteDrawer(props: DrawerProps) {
    const [fullScreen, setFullScreen] = createSignal(false)
    const [title, setTitle] = createSignal("")
    const [body, setBody] = createSignal("")
+   const [wordCount, setWordCount] = createSignal(0)
    const [isSaving, setIsSaving] = createSignal<"saved" | boolean>(false)
    const { setStore } = useGlobalContext()
 
@@ -41,14 +44,15 @@ export default function NoteDrawer(props: DrawerProps) {
 
    createEffect(() => setTitle(props.noteData()?.title || ""))
    createEffect(() => setBody(props.noteData()?.body || ""))
+   createEffect(() => setWordCount(props.noteData()?.words_count || 0))
 
-   const saving = async (body: string, newTitle?: string) => {
+   const saving = async (body: string, wCount:number, newTitle?: string) => {
       setIsSaving(true)
       let id = props.noteData()?.id
       if (typeof id === "undefined") throw new Error("No note id.")
 
       const t = title().length > 1 ? title() : "untitled note"
-      const updatedNote = await updateNote(id, t, body)
+      const updatedNote = await updateNote(id, t, body, wCount)
 
       setIsSaving("saved")
 
@@ -63,10 +67,10 @@ export default function NoteDrawer(props: DrawerProps) {
       props.onClose()
    }
 
-   const triggerSaving = debounce((content: string, newTitle?: string) => saving(content, newTitle), TIMEOUT)
+   const triggerSaving = debounce((content: string, wCount:number, newTitle?: string) => saving(content, wCount, newTitle), TIMEOUT)
 
    const handleTitle = (e: any) => {
-      triggerSaving(body(), e.target.value)
+      triggerSaving(body(), wordCount(), e.target.value)
       setTitle(e.target.value)
    }
 
@@ -79,7 +83,7 @@ export default function NoteDrawer(props: DrawerProps) {
          placement="right"
       >
          <DrawerOverlay />
-         <DrawerContent pos="relative" class="!py-8">
+         <DrawerContent pos="relative" class="">
             <DrawerHeader
                bgColor="$backgroundC"
                class="sticky z-[2] top-[1.5rem] flex items-center space-x-3 max-w-7xl mx-auto w-full"
@@ -115,9 +119,13 @@ export default function NoteDrawer(props: DrawerProps) {
 
             <DrawerBody class="">
                <div style={{ "max-width": options.editor_max_width }} class="max-w-full mx-auto">
-                  <SimpleEditor noteData={props.noteData} setBody={setBody} triggerSaving={triggerSaving} />
+                  <SimpleEditor noteData={props.noteData} setBody={setBody} setWordCount={setWordCount} triggerSaving={triggerSaving} />
                </div>
             </DrawerBody>
+
+            <DrawerFooter class="!py-3 max-w-7xl mx-auto w-full" >
+               <Badge colorScheme="neutral">{wordCount()}</Badge>
+            </DrawerFooter>
          </DrawerContent>
       </Drawer>
    )

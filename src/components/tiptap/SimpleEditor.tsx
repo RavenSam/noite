@@ -9,8 +9,9 @@ import { Scheduled } from "@solid-primitives/scheduled"
 
 interface EditorProps {
    noteData: Accessor<NoteType | undefined>;
-   triggerSaving:Scheduled<[content: string, newTitle?: string | undefined]>
+   triggerSaving:Scheduled<[content: string, wCount:number, newTitle?: string | undefined]>
    setBody:Setter<string>
+   setWordCount:Setter<number>
 }
 
 export default function SimpleEditor(props:EditorProps) {
@@ -26,8 +27,14 @@ export default function SimpleEditor(props:EditorProps) {
       content: props.noteData()?.body || "<p></p>",
        onUpdate: ({ editor }) =>{
           const content = editor.getHTML()
+          const text = editor.getText()
+
+          const count = text.split(/\S+/).length - 1
+
           props.setBody(content)
-          props.triggerSaving(content)
+          props.setWordCount(count)
+
+          props.triggerSaving(content, count)
        }
    }))
 
@@ -43,5 +50,10 @@ export default function SimpleEditor(props:EditorProps) {
       editor()?.commands.focus("end")
    })
 
-   return <div id="simple-editor" onClick={() => editor()?.commands.focus()} class={`prose prose-sm  max-w-none ${colorMode() === "light" ? "" : "prose-invert"}`} ref={ref} />
+   return <div 
+            id="simple-editor" 
+            onClick={() => editor()?.commands.focus()} 
+            class={`prose prose-sm  max-w-none ${colorMode() === "light" ? "" : "prose-invert"}`} 
+            ref={ref} 
+            />
 }

@@ -38,13 +38,15 @@ export async function createNote(title: string, body: string, folderId?: number)
    }
 }
 
-export async function updateNote(id: number, title: string, body: string) {
+export async function updateNote(id: number, title: string, body: string, wordCount:number) {
    try {
       const string_data: string = await invoke("update_note", {
          id,
          title,
          body,
+         wordCount
       })
+
       const updated_data: NoteType = await JSON.parse(string_data)
       return { updated_data, error: false }
    } catch (e: any) {
