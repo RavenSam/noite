@@ -11,7 +11,8 @@ import {
    DrawerFooter,
    DrawerOverlay,
    IconButton,
-   Badge
+   Badge,
+   Tooltip
 } from "@hope-ui/solid"
 import { debounce } from "@solid-primitives/scheduled"
 import { NoteType, updateNote } from "~/api/notes"
@@ -85,7 +86,7 @@ export default function NoteDrawer(props: DrawerProps) {
          <DrawerOverlay />
          <DrawerContent pos="relative" class="">
             <DrawerHeader
-               bgColor="$backgroundC"
+               bgColor="$background"
                class="sticky z-[2] top-[1.5rem] flex items-center space-x-3 max-w-7xl mx-auto w-full"
             >
                <input
@@ -98,7 +99,7 @@ export default function NoteDrawer(props: DrawerProps) {
 
                <Show when={isSaving()}>
                   <span
-                     class={`text-xs right-[7rem] py-2 ${isSaving() !== "saved" ? "animate-fadeInOut" : "opacity-70"}`}
+                     class={`text-xs py-2 ${isSaving() !== "saved" ? "animate-fadeInOut" : "opacity-70"}`}
                   >
                      <Show when={isSaving() === "saved"} fallback="Saving">
                         Saved
@@ -106,15 +107,19 @@ export default function NoteDrawer(props: DrawerProps) {
                   </span>
                </Show>
 
-               <IconButton
-                  onClick={() => setFullScreen((prev) => !prev)}
-                  colorScheme="neutral"
-                  variant="ghost"
-                  aria-label="Expand"
-                  icon={fullScreen() ? <FiMinimize /> : <FiMaximize />}
-               />
+               <Tooltip label={fullScreen() ? "Minimize" : "Expand"}>
+                  <IconButton
+                     onClick={() => setFullScreen((prev) => !prev)}
+                     colorScheme="neutral"
+                     variant="ghost"
+                     aria-label="Expand and minimize button"
+                     icon={fullScreen() ? <FiMinimize /> : <FiMaximize />}
+                  />
+               </Tooltip>
 
-               <DrawerCloseButton borderRadius="0.75rem" pos="unset" size="lg" icon={<HiOutlineArrowRight />} />
+               <Tooltip label="Close">
+                  <DrawerCloseButton borderRadius="0.75rem" pos="unset" size="lg" icon={<HiOutlineArrowRight />} />
+               </Tooltip>
             </DrawerHeader>
 
             <DrawerBody class="">
@@ -123,9 +128,11 @@ export default function NoteDrawer(props: DrawerProps) {
                </div>
             </DrawerBody>
 
-            <DrawerFooter class="!py-3 max-w-7xl mx-auto w-full" >
-               <Badge colorScheme="neutral">{wordCount()}</Badge>
-            </DrawerFooter>
+            <div class="!fixed right-2 bottom-0 py-3">
+               <Tooltip placement="left" label={wordCount() + " words"}>
+                  <Badge colorScheme="neutral">{wordCount()}</Badge>
+               </Tooltip>
+            </div>
          </DrawerContent>
       </Drawer>
    )

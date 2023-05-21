@@ -14,29 +14,32 @@ import {
    ModalHeader,
    ModalBody,
    ModalFooter,
+   Tooltip
 } from "@hope-ui/solid"
-import { FiMoreHorizontal, FiTrash2, FiPenTool, FiStar } from "solid-icons/fi"
+import { FiMoreHorizontal, FiTrash2, FiStar, FiEdit2 } from "solid-icons/fi"
 import { useGlobalContext } from "~/context/store"
 import { deleteNote, updateNoteAccent } from "~/api/notes"
 
 export default function NoteOption(props: { noteId: number }) {
    return (
       <Menu>
-         <MenuTrigger
-            as={IconButton}
-            variant="ghost"
-            marginRight="-10px"
-            fontSize="1.2rem"
-            colorScheme="neutral"
-            class="opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
-            _hover={{ bgColor: "transparent" }}
-            onClick={(e: any) => e.stopPropagation()}
-            icon={<FiMoreHorizontal />}
-         />
+         <Tooltip label="Note options">
+            <MenuTrigger
+               as={IconButton}
+               variant="ghost"
+               marginRight="-10px"
+               fontSize="1.2rem"
+               colorScheme="neutral"
+               class="opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+               _hover={{ bgColor: "transparent" }}
+               onClick={(e: any) => e.stopPropagation()}
+               icon={<FiMoreHorizontal />}
+            />
+         </Tooltip>
          <MenuContent minW="$60">
-            <DeleteNote noteId={props.noteId} />
-
             <CutomizeNote noteId={props.noteId} />
+
+            <DeleteNote noteId={props.noteId} />
          </MenuContent>
       </Menu>
    )
@@ -85,7 +88,7 @@ const CutomizeNote = (props: { noteId: number }) => {
 
    return (
       <>
-         <MenuItem onSelect={onOpen} icon={<FiPenTool />}>
+         <MenuItem onSelect={onOpen} icon={<FiEdit2 />}>
             Cuttomize
          </MenuItem>
          <Modal centered initialFocus="#cancel_delete" opened={isOpen()} onClose={onClose}>

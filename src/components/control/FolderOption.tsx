@@ -15,28 +15,31 @@ import {
    Modal,
    ModalOverlay,
    Input,
+   Tooltip
 } from "@hope-ui/solid"
-import { FiMoreHorizontal, FiTrash2, FiPenTool } from "solid-icons/fi"
+import { FiMoreHorizontal, FiTrash2, FiEdit2 } from "solid-icons/fi"
 import { deleteFolder, updateFolder } from "~/api/folders"
 
 export default function FolderOption(props: { folderId: number }) {
    return (
       <Menu>
-         <MenuTrigger
-            as={IconButton}
-            variant="ghost"
-            marginRight="-10px"
-            fontSize="1.2rem"
-            colorScheme="neutral"
-            class="opacity-0 ml-auto -mb-8 group-hover:opacity-100 focus-visible:opacity-100"
-            _hover={{ bgColor: "transparent" }}
-            onClick={(e: any) => e.stopPropagation()}
-            icon={<FiMoreHorizontal />}
-         />
+         <Tooltip label="Folder options">
+            <MenuTrigger
+               as={IconButton}
+               variant="ghost"
+               marginRight="-10px"
+               fontSize="1.2rem"
+               colorScheme="neutral"
+               class="opacity-0 ml-auto -mb-8 group-hover:opacity-100 focus-visible:opacity-100"
+               _hover={{ bgColor: "transparent" }}
+               onClick={(e: any) => e.stopPropagation()}
+               icon={<FiMoreHorizontal />}
+            />
+         </Tooltip>
          <MenuContent minW="$60">
-            <DeleteFolder folderId={props.folderId} />
-
             <RenameFolder folderId={props.folderId} />
+
+            <DeleteFolder folderId={props.folderId} />
          </MenuContent>
       </Menu>
    )
@@ -87,7 +90,7 @@ const RenameFolder = (props: { folderId: number }) => {
 
    return (
       <>
-         <MenuItem onSelect={onOpen} icon={<FiPenTool />}>
+         <MenuItem onSelect={onOpen} icon={<FiEdit2 />}>
             Rename
          </MenuItem>
          <Modal centered initialFocus="#folder_title" opened={isOpen()} onClose={onClose}>

@@ -9,6 +9,8 @@ import { format, formatDistanceToNow, parseISO } from "date-fns"
 import { useLocation, A } from "@solidjs/router"
 import NoteOption from "~/components/control/NoteOption"
 
+
+
 type NewNoteProps = {
    folderId?: number
    btnFixed?: boolean
@@ -55,11 +57,14 @@ export const SingleNote = (props: { note: NoteType }) => {
             />
 
             <div class="flex items-center justify-between space-x-2">
-               <h2 class="font-semibold truncate" title={noteData()?.title}>
-                  {noteData()?.title}
-               </h2>
+               <Tooltip label={noteData()?.title}>
+                  <h2 class="font-semibold truncate">
+                     {noteData()?.title}
+                  </h2>
+               </Tooltip>
 
                <Show when={location.pathname === "/" && noteData()?.folder}>
+               <Tooltip label="Go to the parent folder">
                   <A
                      onClick={(e: any) => e.stopPropagation()}
                      href={`/folders/${noteData()?.folder}`}
@@ -67,6 +72,7 @@ export const SingleNote = (props: { note: NoteType }) => {
                   >
                      <FiFolder />
                   </A>
+                  </Tooltip>
                </Show>
             </div>
 
@@ -125,16 +131,18 @@ export const NewNote = (props: NewNoteProps) => {
          <Show
             when={!props.btnFixed}
             fallback={
+               <Tooltip placement="left" label="Create a note">
                <IconButton
                   onClick={handleNewNote}
                   colorScheme="neutral"
                   rounded={"$full"}
                   size="lg"
-                  variant="outline"
-                  class="shadow-5 !fixed bottom-5 right-5"
+                  variant="subtle"
+                  class="shadow-5 !fixed bottom-5 right-5 opacity-50 backdrop-blur-[5px]"
                   aria-label="New Note"
                   icon={<HiSolidPlus />}
                />
+               </Tooltip>
             }
          >
             <Button

@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "@solidjs/router"
-import { For, createSignal, createEffect } from "solid-js"
+import { For, createSignal, createEffect, Show } from "solid-js"
 import { NewNote, SingleNote } from "~/components/ui/Note"
 import { NoteType, data } from "~/api/notes"
 import { EmptyNotes } from "~/components/ui/AllNotes"
@@ -55,7 +55,9 @@ export default function Folder() {
                      </For>
                   </div>
 
-                  <NewNote folderId={+params.id} btnFixed />
+                  <Show when={notes()?.length! > 0} >
+                     <NewNote folderId={+params.id} btnFixed />                  
+                  </Show>
                </TabPanel>
             </Tabs>
          </div>

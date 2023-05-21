@@ -45,7 +45,9 @@ export const config: HopeThemeConfig = {
 			baseStyle:{
 				root:{
 					borderRadius: "0.75rem",
-				}
+					opacity:"0.6",
+					backdropFilter:"blur(5px)"
+				},
 			}
 		},
 
@@ -54,7 +56,9 @@ export const config: HopeThemeConfig = {
 					borderRadius: "0.5rem",
 					fontSize:"12px",
 					fontWeight:"bold",
-					padding:"8px 10px"
+					padding:"8px 10px",
+					opacity:"0.6",
+					backdropFilter:"blur(5px)"
 			}
 		},
 
@@ -62,6 +66,9 @@ export const config: HopeThemeConfig = {
 			baseStyle:{
 				closeButton:{
 					borderRadius: "0.75rem",
+				},
+				overlay:{
+					backdropFilter:"blur(3px)"
 				},
 				content:{
 					borderRadius: "0.75rem",
@@ -72,14 +79,34 @@ export const config: HopeThemeConfig = {
 			}
 		},
 
+		Drawer:{
+			baseStyle:{
+				header:{
+					opacity:"0.8",
+					backdropFilter:"blur(5px)"
+				}
+			}
+		},
+
 		Menu :{
 			baseStyle:{
 				content:{
 					borderRadius: "0.75rem",
+					opacity:"0.8",
+					backdropFilter:"blur(5px)"
 				},
 				item:{
 					borderRadius: "0.75rem",
+					fontSize:"13px",
+					fontWeight:"600",
 				}
+			}
+		},
+
+		Badge:{
+			baseStyle:{
+				opacity:"0.7",
+				backdropFilter:"blur(5px)"
 			}
 		},
 
