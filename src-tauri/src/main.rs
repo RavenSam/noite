@@ -31,9 +31,9 @@ fn notes_list(state: tauri::State<AppState>) -> String{
 
 
 #[tauri::command]
-fn update_note(id: i32, title: String, body: String, state: tauri::State<AppState>) -> String{
+fn update_note(id: i32, title: String, body: String, word_count:i32, state: tauri::State<AppState>) -> String{
     let conn = state.conn.lock().unwrap();
-    db::update_note(&conn, id, &title, &body)
+    db::update_note(&conn, id, &title, &body, &word_count)
 }
 
 #[tauri::command]

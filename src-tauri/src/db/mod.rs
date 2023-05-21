@@ -46,8 +46,8 @@ pub fn notes_list(conn: &SqliteConnection) -> String {
 }
 
 
-pub fn update_note(conn: &SqliteConnection, qid: i32, new_title: &str, new_body: &str) -> String {
-    use notes::dsl::{ id, title, body };
+pub fn update_note(conn: &SqliteConnection, qid: i32, new_title: &str, new_body: &str, new_words_count:&i32) -> String {
+    use notes::dsl::{ id, title, body, words_count };
 
     notes::dsl::notes
         .filter(id.eq(&qid))
@@ -58,6 +58,7 @@ pub fn update_note(conn: &SqliteConnection, qid: i32, new_title: &str, new_body:
         .set((
             title.eq(new_title),
             body.eq(new_body),
+            words_count.eq(new_words_count)
         ))
         .execute(conn)
         .expect("Error updating");
