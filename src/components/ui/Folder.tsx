@@ -49,7 +49,7 @@ export const NewFolder = () => {
             <ModalOverlay />
             <ModalContent>
                <ModalCloseButton />
-               <ModalHeader>Delete note</ModalHeader>
+               <ModalHeader>Create folder</ModalHeader>
                <ModalBody>
                   <form
                      onSubmit={(e) => {
@@ -57,7 +57,7 @@ export const NewFolder = () => {
                         handleNewFolder()
                      }}
                   >
-                     <Input id="folder_title" onChange={(e) => setTitle(e.target.value)} placeholder="Search notes" />
+                     <Input id="folder_title" onChange={(e) => setTitle(e.target.value)} placeholder="Folder name" />
                   </form>
                </ModalBody>
                <ModalFooter class="space-x-3">
@@ -65,7 +65,7 @@ export const NewFolder = () => {
                      Cancel
                   </Button>
                   <Button onClick={handleNewFolder} bgColor="$primary" color="$primaryC" colorScheme="neutral">
-                     Save
+                     Create
                   </Button>
                </ModalFooter>
             </ModalContent>
