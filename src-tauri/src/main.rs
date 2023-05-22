@@ -1,20 +1,22 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use std::{sync::Mutex};
+use std::{sync::Mutex, env, fs, path};
+
 
 #[macro_use]
 extern crate diesel;
 #[macro_use] 
 extern crate diesel_migrations;
-embed_migrations!("./migrations/");
 
+use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use diesel::prelude::*;
 pub mod schema;
 pub mod db;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
+pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!("./migrations");
 
 #[tauri::command]
 fn note_create(title: String, body: String, folder : Option<i32>, state: tauri::State<AppState>) -> String {
@@ -77,18 +79,52 @@ fn delete_folder(id: i32, state: tauri::State<AppState>) -> String {
 }
 
 
+// #[derive(Debug, Serialize, Deserialize)]
+// pub struct UserConfig {
+//   pub threads: i32,
+// }
+
+// impl Default for UserConfig {
+//     fn default() -> Self { todo!() }
+// }
+
+/// init use config
+pub fn init_config() {
+    let home_dir = tauri::api::path::home_dir();
+
+    match home_dir {
+      Some(home_dir) => {
+        let app_config = path::Path::new(&home_dir);
+        let app_config = app_config.join(".noite");
+
+        println!("{:?}", app_config);
+        fs::create_dir_all(app_config).unwrap();
+
+        println!("{:?}", env::current_dir());
+        println!("{:?}", env::current_exe());
+      }
+      None => (),
+    }
+}
+
 struct AppState {
     conn: Mutex<SqliteConnection>,
 }
 
 fn main() {
-    let conn = db::establish_connection();
+    init_config();
+
+    let mut conn = db::establish_connection();
+
     let state = AppState {
         conn: Mutex::new(db::establish_connection()),
     };
 
     // embedded_migrations::run(&conn);
-    diesel_migrations::run_pending_migrations(&conn).expect("Error migrating");
+    // diesel_migrations::run_pending_migrations(&conn).expect("Error migrating");
+    conn
+    .run_pending_migrations(MIGRATIONS)
+    .expect("Error migrating");
 
     tauri::Builder::default()
         .manage(state)
