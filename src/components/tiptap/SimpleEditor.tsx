@@ -53,7 +53,7 @@ export default function SimpleEditor(props:EditorProps) {
    return <div 
             id="simple-editor" 
             onClick={() => editor()?.commands.focus()} 
-            class={`prose prose-sm  max-w-none ${colorMode() === "light" ? "" : "prose-invert"}`} 
+            class={`prose max-w-none ${colorMode() === "light" ? "" : "prose-invert"}`} 
             ref={ref} 
             />
 }

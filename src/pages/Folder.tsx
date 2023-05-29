@@ -8,6 +8,7 @@ import { Tabs, TabList, Tab, TabPanel, IconButton } from "@hope-ui/solid"
 import { folders, FolderType } from "~/api/folders"
 import { sortNotesByDate } from "~/utils/sort"
 import { FiChevronLeft } from "solid-icons/fi"
+import VueControl from "~/components/control/VueControl"
 
 export default function Folder() {
    const params = useParams()
@@ -44,6 +45,9 @@ export default function Folder() {
                   <Tab>Notes</Tab>
                </TabList>
                <TabPanel tabIndex="-1" class="relative">
+
+                  <VueControl folderId={+params.id} />
+                  
                   <div class="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
                      <For
                         each={sortNotesByDate(notes())}
@@ -55,9 +59,9 @@ export default function Folder() {
                      </For>
                   </div>
 
-                  <Show when={notes()?.length! > 0} >
+                 {/* <Show when={notes()?.length! > 0} >
                      <NewNote folderId={+params.id} btnFixed />                  
-                  </Show>
+                  </Show>*/}
                </TabPanel>
             </Tabs>
          </div>

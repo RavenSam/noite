@@ -92,7 +92,7 @@ export const config: HopeThemeConfig = {
 			baseStyle:{
 				content:{
 					borderRadius: "0.75rem",
-					opacity:"0.8",
+					opacity:"0.7",
 					backdropFilter:"blur(5px)"
 				},
 				item:{

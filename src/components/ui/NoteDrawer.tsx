@@ -123,7 +123,7 @@ export default function NoteDrawer(props: DrawerProps) {
             </DrawerHeader>
 
             <DrawerBody class="">
-               <div style={{ "max-width": options.editor_max_width }} class="max-w-full mx-auto">
+               <div style={{ "max-width": options.editor_max_width }} class="max-w-full mx-auto pt-6">
                   <SimpleEditor noteData={props.noteData} setBody={setBody} setWordCount={setWordCount} triggerSaving={triggerSaving} />
                </div>
             </DrawerBody>
