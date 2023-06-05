@@ -9,20 +9,20 @@ import {
    MenuItem,
    MenuLabel,
    MenuTrigger,
-} from "@hope-ui/solid";
-import { FiCheck, FiSearch, FiSliders, FiXCircle } from "solid-icons/fi";
-import { Accessor, createSignal, For, Setter, Show } from "solid-js";
-import { NewNote } from "~/components/ui/Note";
-import { SORT_OPTIONS, useGlobalContext } from "~/context/store";
+} from "@hope-ui/solid"
+import { FiCheck, FiSearch, FiSliders, FiXCircle, FiList, FiGrid } from "solid-icons/fi"
+import { Accessor, createSignal, For, Setter, Show } from "solid-js"
+import { NewNote } from "~/components/ui/Note"
+import { SORT_OPTIONS, useGlobalContext } from "~/context/store"
 
 type VueControlType = {
-   folderId?: number;
-};
+   folderId?: number
+}
 
-type SearchNotesProps = { search: Accessor<string>; setSearch: Setter<string> };
+type SearchNotesProps = { search: Accessor<string>; setSearch: Setter<string> }
 
 export default function VueControl(props: VueControlType) {
-   const [search, setSearch] = createSignal("");
+   const [search, setSearch] = createSignal("")
 
    return (
       <div class="flex items-center justify-end pb-5 pt-1 space-x-3">
@@ -32,9 +32,11 @@ export default function VueControl(props: VueControlType) {
             <FilterNotes />
          </Show>
 
+         {/* <DisplayToggle /> */}
+
          <NewNote folderId={props.folderId} />
       </div>
-   );
+   )
 }
 
 const SearchNotes = (props: SearchNotesProps) => {
@@ -51,27 +53,22 @@ const SearchNotes = (props: SearchNotesProps) => {
             placeholder="Search notes"
          />
       </InputGroup>
-   );
-};
+   )
+}
 
 const sortList: { name: string; value: SORT_OPTIONS }[] = [
    { name: "edited descending", value: "edited_desc" },
    { name: "edited ascending", value: "edited_asc" },
    { name: "created descending", value: "created_desc" },
    { name: "created ascending", value: "created_asc" },
-];
+]
 
 const FilterNotes = () => {
-   const { store, setStore } = useGlobalContext();
+   const { store, setStore } = useGlobalContext()
 
    return (
       <Menu>
-         <MenuTrigger
-            as={IconButton}
-            variant="outline"
-            colorScheme="neutral"
-            icon={<FiSliders />}
-         />
+         <MenuTrigger as={IconButton} variant="outline" colorScheme="neutral" icon={<FiSliders />} />
          <MenuContent>
             <MenuGroup>
                <MenuLabel>Sort by</MenuLabel>
@@ -85,9 +82,7 @@ const FilterNotes = () => {
                               <FiXCircle class="opacity-0" />
                            )
                         }
-                        onSelect={() =>
-                           setStore("filter_notes", "sort", el.value)
-                        }
+                        onSelect={() => setStore("filter_notes", "sort", el.value)}
                         class="capitalize"
                      >
                         {el.name}
@@ -99,15 +94,9 @@ const FilterNotes = () => {
                <MenuLabel>Filter</MenuLabel>
                <MenuItem
                   icon={
-                     store.filter_notes.inFolder ? (
-                        <FiCheck class="!text-green-500" />
-                     ) : (
-                        <FiXCircle class="opacity-0" />
-                     )
+                     store.filter_notes.inFolder ? <FiCheck class="!text-green-500" /> : <FiXCircle class="opacity-0" />
                   }
-                  onSelect={() =>
-                     setStore("filter_notes", "inFolder", (el) => !el)
-                  }
+                  onSelect={() => setStore("filter_notes", "inFolder", (el) => !el)}
                   class="capitalize"
                >
                   With Folder
@@ -115,5 +104,23 @@ const FilterNotes = () => {
             </MenuGroup>
          </MenuContent>
       </Menu>
-   );
-};
+   )
+}
+
+const DisplayToggle = () => {
+   const [display, setDisplay] = createSignal<"grid" | "list">("grid")
+
+   const handleDisplay = () => {
+      setDisplay((prev) => (prev == "grid" ? "list" : "grid"))
+   }
+
+   return (
+      <IconButton
+         aria-label="Vue Toggle"
+         variant="outline"
+         colorScheme="neutral"
+         onClick={handleDisplay}
+         icon={display() == "grid" ? <FiGrid /> : <FiList />}
+      />
+   )
+}

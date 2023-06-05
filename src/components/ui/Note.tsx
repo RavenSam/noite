@@ -9,8 +9,6 @@ import { format, formatDistanceToNow, parseISO } from "date-fns"
 import { useLocation, A } from "@solidjs/router"
 import NoteOption from "~/components/control/NoteOption"
 
-
-
 type NewNoteProps = {
    folderId?: number
    btnFixed?: boolean
@@ -58,25 +56,26 @@ export const SingleNote = (props: { note: NoteType }) => {
 
             <div class="flex items-center justify-between space-x-2">
                <Tooltip label={noteData()?.title}>
-                  <h2 class="font-semibold truncate">
-                     {noteData()?.title}
-                  </h2>
+                  <h2 class="font-semibold truncate">{noteData()?.title}</h2>
                </Tooltip>
 
                <Show when={location.pathname === "/" && noteData()?.folder}>
-               <Tooltip label="Go to the parent folder">
-                  <A
-                     onClick={(e: any) => e.stopPropagation()}
-                     href={`/folders/${noteData()?.folder}`}
-                     class="text-sky-600 opacity-50 hover:opacity-100 p-1"
-                  >
-                     <FiFolder />
-                  </A>
+                  <Tooltip label="Go to the parent folder">
+                     <A
+                        onClick={(e: any) => e.stopPropagation()}
+                        href={`/folders/${noteData()?.folder}`}
+                        class="text-sky-600 opacity-50 hover:opacity-100 p-1"
+                     >
+                        <FiFolder />
+                     </A>
                   </Tooltip>
                </Show>
             </div>
 
-            <div class="h-36 my-3 text-sm opacity-70 overflow-hidden" innerHTML={noteData()?.body} />
+            <div
+               class="h-36 my-3 text-sm opacity-50 overflow-hidden prose prose-sm max-w-none dark:prose-invert"
+               innerHTML={noteData()?.body}
+            />
 
             <div class="flex items-center">
                <Show when={typeof noteData()?.updated_at === "string"}>
@@ -132,16 +131,16 @@ export const NewNote = (props: NewNoteProps) => {
             when={!props.btnFixed}
             fallback={
                <Tooltip placement="left" label="Create a note">
-               <IconButton
-                  onClick={handleNewNote}
-                  colorScheme="neutral"
-                  rounded={"$full"}
-                  size="lg"
-                  variant="subtle"
-                  class="shadow-5 !fixed bottom-5 right-5 opacity-50 backdrop-blur-[5px]"
-                  aria-label="New Note"
-                  icon={<HiSolidPlus />}
-               />
+                  <IconButton
+                     onClick={handleNewNote}
+                     colorScheme="neutral"
+                     rounded={"$full"}
+                     size="lg"
+                     variant="subtle"
+                     class="shadow-5 !fixed bottom-5 right-5 opacity-50 backdrop-blur-[5px]"
+                     aria-label="New Note"
+                     icon={<HiSolidPlus />}
+                  />
                </Tooltip>
             }
          >

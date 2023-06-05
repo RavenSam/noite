@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js"
+import { createEffect, createSignal } from "solid-js"
 import {
    ModalContent,
    ModalHeader,
@@ -15,10 +15,11 @@ import {
    Modal,
    ModalOverlay,
    Input,
-   Tooltip
+   Tooltip,
 } from "@hope-ui/solid"
 import { FiMoreHorizontal, FiTrash2, FiEdit2 } from "solid-icons/fi"
 import { deleteFolder, updateFolder } from "~/api/folders"
+import { useGlobalContext } from "~/context/store"
 
 export default function FolderOption(props: { folderId: number }) {
    return (
@@ -60,9 +61,8 @@ const DeleteFolder = (props: { folderId: number }) => {
                <ModalHeader>Delete folder</ModalHeader>
                <ModalBody>
                   <p>
-                     Deleting this folder will permanently remove all the notes inside.
-                     <br />
-                     Do you want to proceed with the deletion?
+                     Deleting this folder will permanently remove all the notes inside. Are you sure you want to proceed
+                     with the deletion?
                   </p>
                </ModalBody>
                <ModalFooter class="space-x-3">
@@ -80,8 +80,14 @@ const DeleteFolder = (props: { folderId: number }) => {
 }
 
 const RenameFolder = (props: { folderId: number }) => {
+   const { store } = useGlobalContext()
    const { isOpen, onOpen, onClose } = createDisclosure()
    const [title, setTitle] = createSignal("")
+
+   createEffect(() => {
+      const folderTitle = store.folders.find((obj) => obj.id === props.folderId)?.title
+      setTitle(folderTitle || "")
+   })
 
    const saveCustom = async () => {
       updateFolder(props.folderId, title())
@@ -97,21 +103,28 @@ const RenameFolder = (props: { folderId: number }) => {
             <ModalOverlay />
             <ModalContent>
                <ModalCloseButton />
-               <ModalHeader>Customize note</ModalHeader>
+               <ModalHeader>Rename folder</ModalHeader>
                <ModalBody>
-                  <Input
-                     id="folder_title"
-                     type="text"
-                     value={title()}
-                     onChange={(e: any) => setTitle(e.target.value)}
-                  />
+                  <form
+                     onSubmit={(e) => {
+                        e.preventDefault()
+                        saveCustom()
+                     }}
+                  >
+                     <Input
+                        id="folder_title"
+                        type="text"
+                        value={title()}
+                        onChange={(e: any) => setTitle(e.target.value)}
+                     />
+                  </form>
                </ModalBody>
                <ModalFooter class="space-x-3">
                   <Button id="cancel_delete" onClick={onClose} variant="subtle" colorScheme="neutral">
                      Cancel
                   </Button>
                   <Button onClick={saveCustom} bgColor="$primary" color="$primaryC" colorScheme="neutral">
-                     Save
+                     Rename
                   </Button>
                </ModalFooter>
             </ModalContent>

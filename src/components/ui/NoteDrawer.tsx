@@ -12,7 +12,7 @@ import {
    DrawerOverlay,
    IconButton,
    Badge,
-   Tooltip
+   Tooltip,
 } from "@hope-ui/solid"
 import { debounce } from "@solid-primitives/scheduled"
 import { NoteType, updateNote } from "~/api/notes"
@@ -47,7 +47,7 @@ export default function NoteDrawer(props: DrawerProps) {
    createEffect(() => setBody(props.noteData()?.body || ""))
    createEffect(() => setWordCount(props.noteData()?.words_count || 0))
 
-   const saving = async (body: string, wCount:number, newTitle?: string) => {
+   const saving = async (body: string, wCount: number, newTitle?: string) => {
       setIsSaving(true)
       let id = props.noteData()?.id
       if (typeof id === "undefined") throw new Error("No note id.")
@@ -68,7 +68,10 @@ export default function NoteDrawer(props: DrawerProps) {
       props.onClose()
    }
 
-   const triggerSaving = debounce((content: string, wCount:number, newTitle?: string) => saving(content, wCount, newTitle), TIMEOUT)
+   const triggerSaving = debounce(
+      (content: string, wCount: number, newTitle?: string) => saving(content, wCount, newTitle),
+      TIMEOUT
+   )
 
    const handleTitle = (e: any) => {
       triggerSaving(body(), wordCount(), e.target.value)
@@ -98,9 +101,7 @@ export default function NoteDrawer(props: DrawerProps) {
                />
 
                <Show when={isSaving()}>
-                  <span
-                     class={`text-xs py-2 ${isSaving() !== "saved" ? "animate-fadeInOut" : "opacity-70"}`}
-                  >
+                  <span class={`text-xs py-2 ${isSaving() !== "saved" ? "animate-fadeInOut" : "opacity-70"}`}>
                      <Show when={isSaving() === "saved"} fallback="Saving">
                         Saved
                      </Show>
@@ -109,6 +110,7 @@ export default function NoteDrawer(props: DrawerProps) {
 
                <Tooltip label={fullScreen() ? "Minimize" : "Expand"}>
                   <IconButton
+                     tabIndex={-1}
                      onClick={() => setFullScreen((prev) => !prev)}
                      colorScheme="neutral"
                      variant="ghost"
@@ -118,13 +120,24 @@ export default function NoteDrawer(props: DrawerProps) {
                </Tooltip>
 
                <Tooltip label="Close">
-                  <DrawerCloseButton borderRadius="0.75rem" pos="unset" size="lg" icon={<HiOutlineArrowRight />} />
+                  <DrawerCloseButton
+                     tabIndex={-1}
+                     borderRadius="0.75rem"
+                     pos="unset"
+                     size="lg"
+                     icon={<HiOutlineArrowRight />}
+                  />
                </Tooltip>
             </DrawerHeader>
 
             <DrawerBody class="">
                <div style={{ "max-width": options.editor_max_width }} class="max-w-full mx-auto pt-6">
-                  <SimpleEditor noteData={props.noteData} setBody={setBody} setWordCount={setWordCount} triggerSaving={triggerSaving} />
+                  <SimpleEditor
+                     noteData={props.noteData}
+                     setBody={setBody}
+                     setWordCount={setWordCount}
+                     triggerSaving={triggerSaving}
+                  />
                </div>
             </DrawerBody>
 

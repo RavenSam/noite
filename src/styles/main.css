@@ -32,6 +32,11 @@
    list-style-type: upper-roman;
 }
 
+.prose ul,
+.prose ol {
+   padding-left: 3rem;
+}
+
 /* -- Nested List  -- */
 /*************************************/
 .titlebar {
