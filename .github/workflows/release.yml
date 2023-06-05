@@ -38,7 +38,7 @@ jobs:
               prerelease: false
             })
             return data.id
-        
+
   build:
     name: Build and Upload Release Asset
     needs: create-release
@@ -82,6 +82,8 @@ jobs:
 
       - name: Build the app
         uses: tauri-apps/tauri-action@dev
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           releaseId: ${{ needs.create-release.outputs.release_id }}
 
