@@ -4,7 +4,7 @@
 <h1 align="center">🌙 Noite: Your Nighttime Note Companion 🌙</h1>
 
 <p align="center">
-  A lightweight, open-source note-taking app for Linux, Windows, and macOS that makes organizing your thoughts a breeze!
+  A lightweight, open-source note-taking app for Linux, Windows, and macOS that makes organizing your thoughts a breeze! Currently under construction 🚧
 </p>
 
 ## 📸 Screenshots
