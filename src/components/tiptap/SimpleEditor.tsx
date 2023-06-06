@@ -3,7 +3,8 @@ import { createEditorTransaction, createTiptapEditor } from "solid-tiptap"
 import { useColorMode } from "@hope-ui/solid"
 import StarterKit from "@tiptap/starter-kit"
 import Typography from "@tiptap/extension-typography"
-import { NoteType } from "../../api/notes"
+import Placeholder from '@tiptap/extension-placeholder'
+import { NoteType } from "~/api/notes"
 import { Scheduled } from "@solid-primitives/scheduled"
 
 interface EditorProps {
@@ -22,7 +23,12 @@ export default function SimpleEditor(props: EditorProps) {
    const editor = createTiptapEditor(() => ({
       editable: editable(),
       element: ref!,
-      extensions: [StarterKit, Typography],
+      extensions: [
+         StarterKit, 
+         Typography,
+         Placeholder.configure({ placeholder: 'Write something...' })
+         ],
+
       content: props.noteData()?.body || "<p></p>",
       onUpdate: ({ editor }) => {
          const content = editor.getHTML()
