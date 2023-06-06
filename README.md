@@ -50,6 +50,6 @@ pnpm tauri build
 
 For more details on building Tauri apps, visit the [official guide](https://tauri.app/v1/guides/distribution/publishing).
 
-## 🤝 Join the Noite Community
+## 🤝 Join
 
 Help make Noite even better. Feel free to contribute, report issues, or suggest new features. Let's make Noite the best note-taking app together! 🌟
