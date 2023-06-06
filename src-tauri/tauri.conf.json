@@ -7,8 +7,8 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "noite",
-    "version": "0.1.0-beta"
+    "productName": "Noite",
+    "version": "0.1.0"
   },
   "tauri": {
     "allowlist": {

@@ -25,7 +25,7 @@ pub struct Folder {
 }
 
 #[derive(Insertable, Serialize, Debug, Clone)]
-#[table_name = "notes"]
+#[diesel(table_name = notes)]
 pub struct NewNote<'a> {
     // this struct will be use when inserting into the db, a struct can be Queryable and Insertable at the same time too.
     pub title: &'a str,
@@ -34,7 +34,7 @@ pub struct NewNote<'a> {
 }
 
 #[derive(Insertable, Serialize, Debug, Clone)]
-#[table_name = "folders"]
+#[diesel(table_name = folders)]
 pub struct NewFolder<'a> {
     // this struct will be use when inserting into the db, a struct can be Queryable and Insertable at the same time too.
     pub title: &'a str,

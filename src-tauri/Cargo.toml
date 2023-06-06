@@ -1,8 +1,8 @@
 [package]
 name = "noite"
-version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
+version = "0.1.0"
+description = "A lightweight note app"
+authors = ["maksam7dev@gmail.com"]
 license = ""
 repository = ""
 edition = "2021"
