@@ -7,12 +7,6 @@
   A lightweight, open-source note-taking app for Linux, Windows, and macOS that makes organizing your thoughts a breeze! Currently under construction 🚧
 </p>
 
-<p align="center">
-  <img src="./screenshots/1.png" width="90%"/>
-  <img src="./screenshots/2.png" width="90%"/>
-  <img src="./screenshots/3.png" width="90%"/>
-</p>
-
 ## 🚀 Get Started
 
 ### 🛠️ Prerequisites
