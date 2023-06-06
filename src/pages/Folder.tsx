@@ -36,6 +36,7 @@ export default function Folder() {
                   variant="ghost"
                   aria-label="Expand"
                   icon={<FiChevronLeft class="text-xl" />}
+                  opacity={0.5}
                />
                <h1 class="text-3xl tracking-wider font-extrabold py-4 leading-none">{folder()?.title}</h1>
             </div>

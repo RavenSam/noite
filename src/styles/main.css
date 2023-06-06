@@ -96,3 +96,23 @@ input[type="color"]::-webkit-color-swatch {
    border: none;
    border-radius: 0.75rem;
 }
+
+
+/*Display a Placeholder only for the first line in an empty editor.*/
+.ProseMirror p.is-editor-empty:first-child::before {
+/*  color: #adb5bd;*/
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  opacity: .7;
+}
+
+/*Display Placeholders on every new line.*/
+/*.ProseMirror p.is-empty::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}*/
