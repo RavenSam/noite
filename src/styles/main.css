@@ -8,6 +8,11 @@
   }
 }*/
 
+::selection {
+  color: var(--hope-colors-primaryC);
+  background: var(--hope-colors-primary);
+}
+
 #simple-editor > div {
    width: 100%;
    min-height: 70vh;
