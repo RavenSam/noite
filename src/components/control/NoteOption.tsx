@@ -14,7 +14,7 @@ import {
    ModalHeader,
    ModalBody,
    ModalFooter,
-   Tooltip
+   Tooltip,
 } from "@hope-ui/solid"
 import { FiMoreHorizontal, FiTrash2, FiStar, FiEdit2 } from "solid-icons/fi"
 import { useGlobalContext } from "~/context/store"
@@ -89,7 +89,7 @@ const CutomizeNote = (props: { noteId: number }) => {
    return (
       <>
          <MenuItem onSelect={onOpen} icon={<FiEdit2 />}>
-            Cuttomize
+            Customize
          </MenuItem>
          <Modal centered initialFocus="#cancel_delete" opened={isOpen()} onClose={onClose}>
             <ModalOverlay />
