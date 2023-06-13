@@ -1,24 +1,20 @@
 import { createEffect, createSignal, Accessor, onMount, Setter, Show } from "solid-js"
 import { createEditorTransaction, createTiptapEditor } from "solid-tiptap"
-import { useColorMode, Tooltip } from "@hope-ui/solid"
+import { useColorMode } from "@hope-ui/solid"
 import StarterKit from "@tiptap/starter-kit"
 import Typography from "@tiptap/extension-typography"
-import Placeholder from '@tiptap/extension-placeholder'
+import Placeholder from "@tiptap/extension-placeholder"
 import { NoteType } from "~/api/notes"
 import { Scheduled } from "@solid-primitives/scheduled"
 import BubbleMenu from "@tiptap/extension-bubble-menu"
+import Underline from "@tiptap/extension-underline"
+import MenuToolbar from "./MenuToolbar"
 
 interface EditorProps {
    noteData: Accessor<NoteType | undefined>
    triggerSaving: Scheduled<[content: string, wCount: number, newTitle?: string | undefined]>
    setBody: Setter<string>
    setWordCount: Setter<number>
-}
-
-const MenuToolbar = () =>{
-   return (
-      <div class="h-10 w-10 bg-pink-400"></div>
-    )
 }
 
 export default function SimpleEditor(props: EditorProps) {
@@ -32,11 +28,12 @@ export default function SimpleEditor(props: EditorProps) {
       editable: editable(),
       element: ref!,
       extensions: [
-         StarterKit, 
+         StarterKit,
+         Underline,
          Typography,
-         Placeholder.configure({ placeholder: 'Write something...' }),
-         BubbleMenu.configure({ element: menu()! }),
-         ],
+         Placeholder.configure({ placeholder: "Write something..." }),
+         BubbleMenu.configure({ element: menu()!, tippyOptions: { placement: "bottom" } }),
+      ],
 
       content: props.noteData()?.body || "<p></p>",
       onUpdate: ({ editor }) => {
@@ -66,18 +63,18 @@ export default function SimpleEditor(props: EditorProps) {
 
    return (
       <>
-       <div ref={setMenu} >
+         <div ref={setMenu}>
             <Show when={editor()} keyed>
-               {(instance) => <MenuToolbar  />}
+               {(instance) => <MenuToolbar editor={instance} />}
             </Show>
-        </div>
+         </div>
 
-      <div
-         id="simple-editor"
-         onClick={() => editor()?.commands.focus()}
-         class="prose max-w-none dark:prose-invert"
-         ref={ref}
-      />
+         <div
+            id="simple-editor"
+            onClick={() => editor()?.commands.focus()}
+            class="prose max-w-none dark:prose-invert"
+            ref={ref}
+         />
       </>
    )
 }
