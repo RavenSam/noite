@@ -1,4 +1,4 @@
-import { createEffect, createSignal, Accessor, onMount, Setter, Show } from "solid-js"
+import { createEffect, createSignal, Accessor, onMount, Setter, Show, onCleanup } from "solid-js"
 import { createEditorTransaction, createTiptapEditor } from "solid-tiptap"
 import { useColorMode } from "@hope-ui/solid"
 import StarterKit from "@tiptap/starter-kit"
@@ -59,6 +59,10 @@ export default function SimpleEditor(props: EditorProps) {
 
    onMount(() => {
       editor()?.commands.focus("end")
+   })
+
+   onCleanup(() => {
+      editor()?.destroy() 
    })
 
    return (
