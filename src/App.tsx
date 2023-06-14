@@ -7,7 +7,7 @@ import AppWindow from "~/components/ui/AppWindow"
 import { config } from "~/components/ui/theme"
 import { GlobalContextProvider } from "~/context/store"
 
-const Notes = lazy(() => import("~/pages/Notes"))
+import Notes from "~/pages/Notes"
 const Settings = lazy(() => import("~/pages/Settings"))
 const Folders = lazy(() => import("~/pages/Folders"))
 const Folder = lazy(() => import("~/pages/Folder"))
