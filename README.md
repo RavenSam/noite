@@ -4,14 +4,31 @@
 <h1 align="center">🌙 Noite: Your Nighttime Note Companion 🌙</h1>
 
 <p align="center">
-  A lightweight, open-source note-taking app for Linux, Windows, and macOS that makes organizing your thoughts a breeze! Currently under construction 🚧
+  A lightweight, open-source note-taking app for Linux, Windows, and macOS that makes organizing your thoughts a breeze!
 </p>
+
+<p align="center">
+  🚧 Currently under construction 🚧
+</p>
+
+<p>&nbsp;</p>
+
+
+## 📸 Screenshots
 
 <p align="center">
   <img src="./screenshots/1.png" width="90%"/>
   <img src="./screenshots/2.png" width="90%"/>
   <img src="./screenshots/3.png" width="90%"/>
 </p>
+
+<p>&nbsp;</p>
+
+## 💾 Download App
+
+Get started with Noite today! Download the app for your operating system [Here](https://github.com/RavenSam/noite/releases/latest).
+
+<p>&nbsp;</p>
 
 ## 🚀 Get Started
 
@@ -43,6 +60,8 @@ pnpm tauri build
 
 For more details on building Tauri apps, visit the [official guide](https://tauri.app/v1/guides/distribution/publishing).
 
-## 🤝 Join the Noite Community
+<p>&nbsp;</p>
+
+## 🤝 Join
 
 Help make Noite even better. Feel free to contribute, report issues, or suggest new features. Let's make Noite the best note-taking app together! 🌟
